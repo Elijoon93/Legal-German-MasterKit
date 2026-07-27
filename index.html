@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Legal German MasterKit — آمادگی زبان آلمانی حقوقی برای LL.M. oec. Privates und Öffentliches Wirtschaftsrecht در دانشگاه ینا.">
+  <meta name="theme-color" content="#132d46">
+  <title>Legal German MasterKit</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">رفتن به محتوای اصلی</a>
+
+  <header class="hero">
+    <div class="container hero__inner">
+      <div>
+        <p class="eyebrow">Friedrich-Schiller-Universität Jena</p>
+        <h1>Legal German MasterKit</h1>
+        <p class="hero__subtitle">آمادگی زبان آلمانی تخصصی برای رشته <span lang="de">LL.M. oec. Privates und Öffentliches Wirtschaftsrecht</span></p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="#modules">شروع مسیر آموزشی</a>
+          <button class="button button--ghost" id="resetProgress" type="button">بازنشانی پیشرفت</button>
+        </div>
+      </div>
+      <aside class="progress-card" aria-label="وضعیت پیشرفت">
+        <span>پیشرفت نمونه</span>
+        <strong id="progressValue">0٪</strong>
+        <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+        <small>داده‌ها فقط در مرورگر شما ذخیره می‌شوند.</small>
+      </aside>
+    </div>
+  </header>
+
+  <nav class="site-nav" aria-label="منوی اصلی">
+    <div class="container site-nav__inner">
+      <a href="#overview">معرفی</a>
+      <a href="#skills">چهار مهارت</a>
+      <a href="#modules">ماژول‌ها</a>
+      <a href="#phrases">جمله‌بندی حقوقی</a>
+      <a href="#roadmap">نقشه راه</a>
+    </div>
+  </nav>
+
+  <main id="main" class="container main-content">
+    <section id="overview" class="panel">
+      <div class="section-heading">
+        <p class="eyebrow">هدف سامانه</p>
+        <h2>آمادگی برای تحصیل، سمینار و نگارش حقوقی</h2>
+      </div>
+      <p>این نسخه، هسته قابل توسعه یک وب‌اپ آفلاین و مخزن‌پذیر است. تمرکز آن بر زبان تخصصی حقوق اقتصادی خصوصی و عمومی، نگارش دانشگاهی، تحلیل پرونده و آمادگی زبانی برای محیط دانشگاه است.</p>
+    </section>
+
+    <section id="skills" class="section-block">
+      <div class="section-heading">
+        <p class="eyebrow">Four Skills</p>
+        <h2>چهار مهارت اصلی</h2>
+      </div>
+      <div class="grid grid--4">
+        <article class="card"><span class="card__index">01</span><h3 lang="de">Lesen</h3><p>خواندن قوانین، مقالات، آرای قضایی و متون دانشگاهی.</p></article>
+        <article class="card"><span class="card__index">02</span><h3 lang="de">Hören</h3><p>فهم کلاس، سخنرانی، ارائه و گفت‌وگوهای تخصصی.</p></article>
+        <article class="card"><span class="card__index">03</span><h3 lang="de">Schreiben</h3><p>تمرین ایمیل رسمی، تحلیل حقوقی، سمینار و پایان‌نامه.</p></article>
+        <article class="card"><span class="card__index">04</span><h3 lang="de">Sprechen</h3><p>مشارکت در کلاس، ارائه سمینار و دفاع شفاهی.</p></article>
+      </div>
+    </section>
+
+    <section id="modules" class="section-block">
+      <div class="section-heading">
+        <p class="eyebrow">Curriculum Core</p>
+        <h2>ماژول‌های هسته</h2>
+      </div>
+      <div id="moduleGrid" class="grid grid--3"></div>
+    </section>
+
+    <section id="phrases" class="panel">
+      <div class="section-heading">
+        <p class="eyebrow">Juristische Formulierungen</p>
+        <h2>کارگاه جمله‌بندی حقوقی</h2>
+      </div>
+      <label class="field" for="phraseCategory">
+        <span>کاربرد جمله</span>
+        <select id="phraseCategory"></select>
+      </label>
+      <div id="phraseList" class="phrase-list" aria-live="polite"></div>
+    </section>
+
+    <section id="roadmap" class="section-block">
+      <div class="section-heading">
+        <p class="eyebrow">Roadmap</p>
+        <h2>نقشه راه توسعه</h2>
+      </div>
+      <ol class="timeline">
+        <li><strong>هسته فعلی:</strong> رابط واکنش‌گرا، ذخیره محلی، ماژول‌ها و بانک نمونه جمله‌ها.</li>
+        <li><strong>فاز محتوایی:</strong> واژگان، گرامر حقوقی، متون خواندنی و تمرین‌های نوشتاری.</li>
+        <li><strong>فاز دانشگاهی:</strong> Seminararbeit، Magisterarbeit، ارائه و مطالعه موردی.</li>
+        <li><strong>فاز ارزیابی:</strong> آزمون، داشبورد، گزارش پیشرفت و بسته موبایل.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>Legal German MasterKit — نسخه مخزن‌پذیر GitHub Pages</p>
+      <p><span id="year"></span></p>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js" defer></script>
+</body>
+</html>
