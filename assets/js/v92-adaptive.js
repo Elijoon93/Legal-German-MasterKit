@@ -34,6 +34,10 @@
       if(label&&!button.title)button.title=label;
       button.removeAttribute("style");
     });
+    const topbar=document.querySelector(".topbar");
+    topbar?.style.setProperty("height","auto","important");
+    topbar?.style.setProperty("right","auto","important");
+    topbar?.style.setProperty("left","auto","important");
     let badge=document.querySelector("#v92ModeBadge");
     if(!badge){
       badge=document.createElement("span");
@@ -44,6 +48,7 @@
     const info=classify();
     badge.textContent=info.mode.toUpperCase();
     badge.title=`${info.width}×${info.height} · ${info.orientation}`;
+    badge.style.display=info.mode==="phone"?"none":"inline-flex";
     const release=document.querySelector("#v90ReleaseBadge");
     if(release)release.textContent=`v${VERSION}`;
     const brand=document.querySelector(".v90-brand small");
