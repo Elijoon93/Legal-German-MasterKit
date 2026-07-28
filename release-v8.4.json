@@ -1,0 +1,33 @@
+{
+  "version": "8.4.0",
+  "release": "Academic Experience Rebuild",
+  "reference_architecture": "PflegeDeutsch Pro information architecture and interaction patterns only",
+  "domain_data_reused": false,
+  "changes": {
+    "desktop_navigation": "grouped sticky sidebar",
+    "mobile_navigation": "five-item bottom navigation with More sheet",
+    "dashboard": "next action, daily agenda, review status and weakest subject",
+    "study_hub": "semester, curriculum, subjects, books and research outputs",
+    "skills_hub": "integrated reading, listening, speaking, writing, vocabulary and SRS",
+    "practice_hub": "cases, course exams, writing and adaptive review",
+    "visual_system": "calm teal, navy, paper white, consistent cards and reduced decorative noise"
+  },
+  "preserved": [
+    "200 legal terms",
+    "100 legal sentence patterns",
+    "20 reading/listening texts",
+    "12 legal cases",
+    "10 course exams",
+    "adaptive weakness engine",
+    "spaced repetition",
+    "writing history",
+    "backup and reporting"
+  ],
+  "static_acceptance": {
+    "javascript_syntax": "PASS",
+    "existing_data_preserved": true,
+    "existing_state_preserved": true,
+    "pwa_assets_updated": true,
+    "adaptive_daily_task_routing": "PASS"
+  }
+}
