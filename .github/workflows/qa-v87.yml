@@ -27,8 +27,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run cumulative v9.3.1 source and harness gates
-        run: node scripts/qa-v931.mjs
+      - name: Run cumulative v9.3.2 startup and blank-page prevention gates
+        run: node scripts/qa-v932.mjs
 
   visual-acceptance:
     if: github.event_name != 'schedule'
@@ -46,13 +46,13 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Install Chromium and WebKit
         run: npx playwright install --with-deps chromium webkit
-      - name: Run 13-profile visual acceptance
+      - name: Run 13-profile startup and visual acceptance
         run: npm run qa:visual
-      - name: Upload visual acceptance evidence
+      - name: Upload startup and visual evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: visual-acceptance-v9.3.1
+          name: startup-recovery-v9.3.2
           path: artifacts/
           if-no-files-found: warn
           retention-days: 14
@@ -75,13 +75,13 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Install Chromium and WebKit
         run: npx playwright install --with-deps chromium webkit
-      - name: Run public GitHub Pages acceptance
+      - name: Run public GitHub Pages startup acceptance
         run: npm run qa:visual
       - name: Upload public runtime evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: public-runtime-v9.3.1
+          name: public-startup-v9.3.2
           path: artifacts/
           if-no-files-found: warn
           retention-days: 14
