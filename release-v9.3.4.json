@@ -1,0 +1,54 @@
+{
+  "version": "9.3.4",
+  "release": "Acceptance Automation and Evidence Package",
+  "scope": "Automate existing device acceptance and produce auditable evidence; no new learning menu, subject content or instructional module.",
+  "automation": {
+    "manual_button": true,
+    "query_trigger": "?acceptance=auto",
+    "runs_only_outside_profile_iframes": true,
+    "profiles": 13,
+    "sequential_execution": true,
+    "waits_for_app_ready": true,
+    "waits_for_runtime_stable": true,
+    "stale_release_rows_ignored": true,
+    "duplicate_run_guard": true
+  },
+  "evidence_package": {
+    "schema": "lgmk-device-acceptance-report/v1",
+    "format": "JSON",
+    "includes": [
+      "release and runtime markers",
+      "current viewport result",
+      "all 13 automated profile results",
+      "failing check names",
+      "physical confirmation state",
+      "automation start and finish timestamps",
+      "final acceptance decision"
+    ],
+    "downloadable_in_browser": true,
+    "maximum_reports_in_state": 1
+  },
+  "acceptance_logic": {
+    "automated_pass_requires": "13 of 13 profiles executed with zero failed checks",
+    "physical_pass_requires": "13 of 13 physical confirmations",
+    "final_acceptance_requires": "automated pass and physical pass",
+    "partial_matrix_may_not_show_pass": true,
+    "results_must_match_current_release": true
+  },
+  "preserved": {
+    "runtime_freeze_elimination": true,
+    "compact_windows_rail": true,
+    "dual_reference_learning_os": true,
+    "legal_content": true,
+    "user_state": true,
+    "offline_support": true
+  },
+  "release_gates": {
+    "visible_runtime_badge": "v9.3.4",
+    "automatic_matrix_available": true,
+    "evidence_export_available": true,
+    "stale_results_forbidden": true,
+    "final_acceptance_without_physical_evidence_forbidden": true,
+    "state_reset": false
+  }
+}
