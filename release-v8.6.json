@@ -1,0 +1,51 @@
+{
+  "version": "8.6.0",
+  "release": "Mobile and Tablet Acceptance",
+  "evidence": {
+    "source": "User-provided iPhone screenshots",
+    "identified_issues": [
+      "Sticky top bar obscured scrolled content on iPhone Safari",
+      "Bottom navigation was oversized and inherited boxed icon styles",
+      "Mobile content needed reliable clearance above fixed navigation",
+      "Safari dynamic viewport and keyboard states were not handled",
+      "Tablet portrait widths between 821 and 1024 pixels retained the desktop sidebar",
+      "Mixed Persian and German text needed safer wrapping and bidi handling"
+    ]
+  },
+  "fixes": {
+    "responsive_breakpoint": "Mobile/tablet shell active through 1024px",
+    "ios_header": "Non-sticky compact header on mobile and tablet",
+    "bottom_navigation": "58-60px navigation with safe-area padding and reset icon styles",
+    "dynamic_viewport": "VisualViewport-based height variable and keyboard detection",
+    "forms": "16px iOS inputs to prevent focus zoom",
+    "content_clearance": "App shell and body reserve navigation plus safe-area height",
+    "tablet_layout": "Two-column tablet grids and full-width tablet shell",
+    "text_rendering": "100% text-size adjustment, plaintext bidi and overflow wrapping",
+    "more_sheet": "Safe-area-aware modal sheet with outside-click dismissal"
+  },
+  "acceptance_targets": [
+    "iPhone 375x812",
+    "iPhone 390x844",
+    "iPhone 430x932",
+    "Android 360x800",
+    "iPad portrait 768x1024",
+    "Tablet portrait 820x1180",
+    "Tablet landscape 1024x768"
+  ],
+  "preserved": {
+    "domain_content": true,
+    "learning_state": true,
+    "course_workspace": true,
+    "semester_operations": true,
+    "source_matrix": true,
+    "global_search": true
+  },
+  "static_acceptance": {
+    "javascript_syntax": "PASS",
+    "safe_area_rules": "PASS",
+    "dynamic_viewport_handler": "PASS",
+    "keyboard_navigation_hide": "PASS",
+    "tablet_breakpoint": "PASS",
+    "legacy_state_reset": false
+  }
+}
