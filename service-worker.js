@@ -1,5 +1,17 @@
-const CACHE='lgmk-v8-6-mobile-acceptance-20260728b';
-const ASSETS=['./','./index.html','./manifest.webmanifest?v=860','./icon.svg','./release-v8.5.json','./release-v8.6.json','./assets/css/style.css?v=810','./assets/css/v82-professional.css?v=820','./assets/css/v83-depth.css?v=830','./assets/css/v84-pflege-inspired.css?v=840','./assets/css/v85-workspace.css?v=850','./assets/css/v86-mobile-acceptance.css?v=860','./assets/css/v86-mobile-hotfix.css?v=860','./assets/js/data-core.js?v=810','./assets/js/data-language.js?v=810','./assets/js/data-learning.js?v=810','./assets/js/data-merge.js?v=810','./assets/js/v82-data-reset.js?v=820','./assets/js/v82-vocab-data.js?v=820','./assets/js/v82-sentence-data.js?v=820','./assets/js/v82-readings-a.js?v=820','./assets/js/v82-readings-b.js?v=820','./assets/js/v82-cases-data.js?v=820','./assets/js/v82-exams-data.js?v=820','./assets/js/app-core.js?v=810','./assets/js/app-views1.js?v=810','./assets/js/app-views2.js?v=810','./assets/js/v82-upgrade-a.js?v=820','./assets/js/v82-upgrade-b.js?v=820','./assets/js/v82-library-patch.js?v=820','./assets/js/v83-engine.js?v=830','./assets/js/v83-ui.js?v=830','./assets/js/v83-hotfix.js?v=830','./assets/js/v84-shell.js?v=840','./assets/js/v84-hotfix.js?v=840','./assets/js/v85-engine.js?v=850','./assets/js/v85-ui.js?v=850','./assets/js/v86-mobile-acceptance.js?v=860'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r}).catch(()=>caches.match(e.request).then(x=>x||caches.match('./index.html'))))});
+const CACHE='lgmk-v8-6-mobile-acceptance-20260728c';
+const ASSETS=['./','./index.html','./manifest.webmanifest?v=861','./icon.svg','./release-v8.5.json','./release-v8.6.json','./assets/css/style.css?v=810','./assets/css/v82-professional.css?v=820','./assets/css/v83-depth.css?v=830','./assets/css/v84-pflege-inspired.css?v=840','./assets/css/v85-workspace.css?v=850','./assets/css/v86-mobile-acceptance.css?v=861','./assets/css/v86-mobile-hotfix.css?v=861','./assets/js/data-core.js?v=810','./assets/js/data-language.js?v=810','./assets/js/data-learning.js?v=810','./assets/js/data-merge.js?v=810','./assets/js/v82-data-reset.js?v=820','./assets/js/v82-vocab-data.js?v=820','./assets/js/v82-sentence-data.js?v=820','./assets/js/v82-readings-a.js?v=820','./assets/js/v82-readings-b.js?v=820','./assets/js/v82-cases-data.js?v=820','./assets/js/v82-exams-data.js?v=820','./assets/js/app-core.js?v=810','./assets/js/app-views1.js?v=810','./assets/js/app-views2.js?v=810','./assets/js/v82-upgrade-a.js?v=820','./assets/js/v82-upgrade-b.js?v=820','./assets/js/v82-library-patch.js?v=820','./assets/js/v83-engine.js?v=830','./assets/js/v83-ui.js?v=830','./assets/js/v83-hotfix.js?v=830','./assets/js/v84-shell.js?v=840','./assets/js/v84-hotfix.js?v=840','./assets/js/v85-engine.js?v=850','./assets/js/v85-ui.js?v=850','./assets/js/v86-mobile-acceptance.js?v=861','./assets/js/v86-force-refresh.js?v=861'];
+self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
+self.addEventListener('message',event=>{if(event.data==='SKIP_WAITING')self.skipWaiting()});
+self.addEventListener('fetch',event=>{
+  if(event.request.method!=='GET')return;
+  const url=new URL(event.request.url);
+  const sameOrigin=url.origin===self.location.origin;
+  const refreshable=sameOrigin&&(url.pathname.endsWith('/')||url.pathname.endsWith('/index.html')||/\.(?:css|js|webmanifest)$/.test(url.pathname));
+  const request=refreshable?new Request(event.request,{cache:'no-store'}):event.request;
+  event.respondWith(fetch(request).then(response=>{
+    const copy=response.clone();
+    if(response.ok)caches.open(CACHE).then(cache=>cache.put(event.request,copy));
+    return response;
+  }).catch(()=>caches.match(event.request).then(cached=>cached||caches.match('./index.html'))));
+});
