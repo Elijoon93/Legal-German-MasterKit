@@ -1,0 +1,61 @@
+{
+  "version": "9.1.0",
+  "release": "Architecture Fidelity and Content Presentation Rebuild",
+  "reference": {
+    "source": "PflegeDeutsch Pro",
+    "allowed_inspiration": [
+      "information architecture",
+      "writing hierarchy",
+      "quick actions",
+      "learning hub tabs",
+      "lesson list pattern",
+      "card rhythm",
+      "mobile and tablet behavior"
+    ],
+    "forbidden_transfer": [
+      "nursing terminology",
+      "clinical scenarios",
+      "medical data",
+      "nursing learning content"
+    ]
+  },
+  "architecture": {
+    "flow": ["Hub", "List", "Detail", "Practice", "Output"],
+    "primary_hubs": ["Study", "Learning", "Practice", "Research"],
+    "tabbed_hubs": 4,
+    "tabs_per_hub": 4,
+    "dashboard_quick_actions": 4,
+    "mobile_primary_tabs": 5,
+    "desktop_sidebar_px": 260,
+    "final_style_layer": "assets/css/v91-fidelity.css",
+    "final_architecture_layer": "assets/js/v91-architecture.js"
+  },
+  "presentation": {
+    "dark_hero_removed": true,
+    "light_operational_headers": true,
+    "short_action_oriented_copy": true,
+    "equal_quick_action_cards": true,
+    "numbered_list_items": true,
+    "persistent_hub_tabs": true,
+    "single_column_phone_layout": true,
+    "safe_area_supported": true,
+    "minimum_ios_input_font_px": 16
+  },
+  "preserved": {
+    "legal_content": true,
+    "deep_lessons": 30,
+    "official_norm_records": 24,
+    "case_briefs_and_teaching_cases": 13,
+    "v9_device_acceptance": true,
+    "user_state": true,
+    "offline_support": true
+  },
+  "release_gates": {
+    "visible_runtime_badge": "v9.1.0",
+    "no_nursing_content": true,
+    "no_empty_primary_hub": true,
+    "state_reset": false,
+    "public_runtime_verification": true,
+    "physical_iphone_ipad_acceptance": true
+  }
+}
