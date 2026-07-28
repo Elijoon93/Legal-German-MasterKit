@@ -52,6 +52,8 @@
     document.documentElement.dataset.release=VERSION;
     const loading=statusElement();
     if(loading)loading.remove();
+    const panel=document.querySelector("#bootError");
+    if(panel){panel.hidden=true;panel.removeAttribute("style")}
     window.LGMK_STARTUP_DIAGNOSTICS={version:VERSION,startedAt,ready:true,recoveryAttempts,errors:[...errors],readyAt:Date.now(),durationMs:Date.now()-startedAt};
   }
   function attemptRecovery(reason){
@@ -62,14 +64,14 @@
       if(typeof window.boot==="function")window.boot();
       else if(typeof window.buildNav==="function"&&typeof window.go==="function"){
         window.buildNav();
-        window.go(window.state?.view||"dashboard");
+        window.go("dashboard");
       }
     }catch(error){record("recovery",error);showBootError(error)}
-    setTimeout(()=>{if(shellReady())markReady()},250);
+    setTimeout(()=>{if(shellReady())markReady()},300);
   }
   function finalCheck(){
     if(shellReady())return markReady();
-    const last=errors.at(-1);
+    const last=errors.length?errors[errors.length-1]:null;
     const detail=last?.text||"فایل‌های برنامه کامل اجرا نشدند. صفحه را یک‌بار بازآوری کنید.";
     showBootError(detail);
     const retry=document.querySelector("#retryBtn");
@@ -79,9 +81,10 @@
   window.addEventListener("lgmk:ready",markReady,{once:true});
   document.addEventListener("DOMContentLoaded",()=>{
     setStatus("در حال ساخت محیط مطالعه","فایل‌ها به‌صورت موازی دریافت شده‌اند؛ راه‌اندازی نهایی در حال انجام است.");
-    setTimeout(()=>attemptRecovery("کنترل اولیه"),700);
-    setTimeout(()=>attemptRecovery("کنترل دوم"),2500);
-    setTimeout(finalCheck,7000);
+    setTimeout(()=>attemptRecovery("کنترل اولیه"),1200);
+    setTimeout(()=>attemptRecovery("کنترل دوم"),4000);
+    setTimeout(()=>setStatus("بارگذاری روی اتصال کند ادامه دارد","در صورت کامل‌شدن فایل‌ها، محیط مطالعه خودکار نمایش داده می‌شود."),7500);
+    setTimeout(finalCheck,12000);
   },{once:true});
   window.LGMK_STARTUP={version:VERSION,attemptRecovery,markReady,record};
 })();
