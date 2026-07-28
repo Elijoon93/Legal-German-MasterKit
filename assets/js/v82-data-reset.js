@@ -1,0 +1,1 @@
+window.LGMK_DATA.readings=[];
