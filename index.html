@@ -3,16 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0d3b4a">
-<meta name="description" content="Legal German MasterKit v8.1 Semester and Research Pack">
-<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#172533">
+<meta name="description" content="Legal German MasterKit v8.2 Professional Academic Platform">
+<link rel="manifest" href="manifest.webmanifest?v=820">
 <link rel="icon" href="icon.svg">
 <link rel="stylesheet" href="assets/css/style.css?v=810">
-<title>Legal German MasterKit v8.1</title>
+<link rel="stylesheet" href="assets/css/v82-professional.css?v=820">
+<title>Legal German MasterKit v8.2</title>
 </head>
 <body>
 <header class="topbar">
-  <div><h1>Legal German MasterKit v8.1</h1><p>Semester & Research Pack · LL.M. oec. Jena</p></div>
+  <div><h1>Legal German MasterKit v8.2</h1><p>Professional Academic Platform · LL.M. oec. Jena</p></div>
   <button id="installBtn" type="button" hidden>نصب</button>
 </header>
 <div id="bootError" class="boot-error" hidden><strong>خطا در اجرای برنامه</strong><span id="bootErrorText"></span><button id="retryBtn" type="button">تلاش دوباره</button></div>
@@ -25,6 +26,9 @@
   <section id="library" class="view"></section>
   <section id="language" class="view"></section>
   <section id="reading" class="view"></section>
+  <section id="listening" class="view"></section>
+  <section id="speaking" class="view"></section>
+  <section id="writing" class="view"></section>
   <section id="research" class="view"></section>
   <section id="caseLab" class="view"></section>
   <section id="exam" class="view"></section>
@@ -35,8 +39,17 @@
 <script src="assets/js/data-language.js?v=810"></script>
 <script src="assets/js/data-learning.js?v=810"></script>
 <script src="assets/js/data-merge.js?v=810"></script>
+<script src="assets/js/v82-data-reset.js?v=820"></script>
+<script src="assets/js/v82-vocab-data.js?v=820"></script>
+<script src="assets/js/v82-sentence-data.js?v=820"></script>
+<script src="assets/js/v82-readings-a.js?v=820"></script>
+<script src="assets/js/v82-readings-b.js?v=820"></script>
+<script src="assets/js/v82-cases-data.js?v=820"></script>
+<script src="assets/js/v82-exams-data.js?v=820"></script>
 <script src="assets/js/app-core.js?v=810"></script>
 <script src="assets/js/app-views1.js?v=810"></script>
-<script src="assets/js/app-views2.js?v=810" defer></script>
+<script src="assets/js/app-views2.js?v=810"></script>
+<script src="assets/js/v82-upgrade-a.js?v=820"></script>
+<script src="assets/js/v82-upgrade-b.js?v=820"></script>
 </body>
 </html>
