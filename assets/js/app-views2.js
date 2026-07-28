@@ -25,6 +25,7 @@ function updateLanguageFilters(){
  state.languageCat=document.querySelector("#languageCat")?.value||"همه";save();render("language")
 }
 function wire(){
+ if(window.__LGMK_WIRED)return;window.__LGMK_WIRED=true;
  document.body.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
   if(b.dataset.open)go(b.dataset.open);
   if(b.hasAttribute("data-save-profile")){state.profile={name:document.querySelector("#pName").value,level:document.querySelector("#pLevel").value,hours:Number(document.querySelector("#pHours").value),focus:document.querySelector("#pFocus").value,semester:document.querySelector("#pSemester").value};generatePlan()}
@@ -38,7 +39,7 @@ function wire(){
   if(b.dataset.readingDone){state.readingDone[b.dataset.readingDone]=!state.readingDone[b.dataset.readingDone];state.minutes+=10;save();render("reading")}
   if(b.hasAttribute("data-save-research-project")){state.researchProject={topic:document.querySelector("#rpTopic").value,question:document.querySelector("#rpQuestion").value,deadline:document.querySelector("#rpDeadline").value,notes:document.querySelector("#rpNotes").value};save();alert("پرونده پژوهش ذخیره شد.")}
   if(b.hasAttribute("data-evaluate-case")){const c=DATA.cases[state.caseIndex],text=document.querySelector("#caseAnswer").value;state.caseAnswers[c.id]=text;state.minutes+=10;save();const r=evaluateCase(text,c);document.querySelector("#caseFeedback").innerHTML=r.map(x=>`<div class="feedback ${x.ok?"good":"warn"}">${x.ok?"✓":"○"} ${x.l}</div>`).join("")}
-  if(b.hasAttribute("data-backup")){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Legal-German-MasterKit-v8.1-backup.json";a.click();URL.revokeObjectURL(a.href)}
+  if(b.hasAttribute("data-backup")){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Legal-German-MasterKit-v9.3.2-backup.json";a.click();URL.revokeObjectURL(a.href)}
  });
  document.body.addEventListener("change",e=>{
   if(e.target.matches("[data-plan-task]")){for(const w of state.plan){const t=w.tasks.find(x=>x.id===e.target.dataset.planTask);if(t){t.done=e.target.checked;if(t.done)state.minutes+=Math.round(t.hours*60);break}}save()}
@@ -49,8 +50,29 @@ function wire(){
  });
  document.body.addEventListener("input",e=>{if(e.target.id==="subjectSearch")render("subjects");if(e.target.id==="bookSearch")render("library");if(e.target.id==="languageSearch")updateLanguageFilters()});
  document.body.addEventListener("submit",e=>{if(e.target.id!=="quizForm")return;e.preventDefault();let score=0;DATA.quiz.forEach((q,i)=>{const v=e.target.elements[`q${i}`]?.value;const ok=Number(v)===q.answer;if(ok)score++;document.querySelector(`#ex${i}`).innerHTML=`<div class="feedback ${ok?"good":"warn"}">${ok?"✓ درست":"○ نیاز به مرور"} — ${q.explanation}</div>`});state.examScores.push({score:`${score}/${DATA.quiz.length}`,date:new Date().toISOString()});state.minutes+=20;save();document.querySelector("#quizResult").innerHTML=`<div class="feedback ${score>=16?"good":"warn"}"><b>امتیاز: ${score} از ${DATA.quiz.length}</b></div>`});
- document.querySelector("#retryBtn").onclick=()=>location.reload()
+ const retry=document.querySelector("#retryBtn");if(retry)retry.onclick=()=>location.replace(`${location.pathname}?v=932&t=${Date.now()}`)
 }
-function setupInstall(){const b=document.querySelector("#installBtn");window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;b.hidden=false});b.onclick=async()=>{if(!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;b.hidden=true}}
-function boot(){try{buildNav();wire();setupInstall();if(!state.plan.length)generatePlan();go(state.view);if("serviceWorker" in navigator)navigator.serviceWorker.register("service-worker.js?v=810").catch(()=>{})}catch(err){console.error(err);document.querySelector("#bootErrorText").textContent=err.message;document.querySelector("#bootError").hidden=false}}
-document.addEventListener("DOMContentLoaded",boot);
+function setupInstall(){
+ if(window.__LGMK_INSTALL_WIRED)return;window.__LGMK_INSTALL_WIRED=true;
+ const b=document.querySelector("#installBtn");if(!b)return;
+ window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;b.hidden=false});
+ b.onclick=async()=>{if(!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;b.hidden=true}
+}
+function boot(){
+ if(window.__LGMK_BOOT_STATE==="running"||window.__LGMK_BOOT_STATE==="ready")return;
+ window.__LGMK_BOOT_STATE="running";
+ try{
+  buildNav();wire();setupInstall();if(!state.plan.length)generatePlan();go(state.view);
+  if("serviceWorker" in navigator)navigator.serviceWorker.register("service-worker.js?v=932").catch(()=>{});
+  window.__LGMK_BOOT_STATE="ready";
+  window.dispatchEvent(new CustomEvent("lgmk:ready",{detail:{version:window.LGMK_RELEASE_VERSION||"9.3.2"}}));
+ }catch(err){
+  window.__LGMK_BOOT_STATE="failed";console.error(err);
+  const text=document.querySelector("#bootErrorText"),panel=document.querySelector("#bootError");
+  if(text)text.textContent=err?.stack||err?.message||String(err);
+  if(panel){panel.hidden=false;panel.style.display="grid"}
+  window.LGMK_STARTUP?.record?.("boot",err)
+ }
+}
+window.boot=boot;
+if(document.readyState==="complete")queueMicrotask(boot);else document.addEventListener("DOMContentLoaded",boot,{once:true});
