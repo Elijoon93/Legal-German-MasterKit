@@ -1,0 +1,65 @@
+{
+  "version": "9.2.0",
+  "release": "Adaptive Shell Isolation for Windows Tablet and Phone",
+  "root_cause": {
+    "confirmed": true,
+    "source": "assets/css/v82-professional.css",
+    "conflicts": [
+      "body padding-left 250px on desktop",
+      "second fixed main navigation",
+      "legacy MASTERKIT 8.2 pseudo title",
+      "legacy button grid rules applied to the v9 sidebar"
+    ],
+    "resolution": "Keep legacy feature styling but isolate and neutralize every legacy shell rule in the final cascade layer."
+  },
+  "adaptive_modes": {
+    "desktop": {"minimum_effective_width": 1360, "navigation": "264–280px labelled sidebar"},
+    "compact": {"minimum_effective_width": 1100, "maximum_effective_width": 1359, "navigation": "88px icon rail"},
+    "tablet": {"minimum_effective_width": 700, "maximum_effective_width": 1099, "navigation": "five-item bottom navigation"},
+    "phone": {"maximum_effective_width": 699, "navigation": "five-item bottom navigation and single-column content"}
+  },
+  "runtime_detection": {
+    "uses_user_agent": false,
+    "signals": ["VisualViewport width", "VisualViewport height", "pointer precision", "orientation", "keyboard occlusion"],
+    "responds_to": ["window resize", "browser zoom", "split-screen", "orientation change", "virtual keyboard"],
+    "visible_mode_badge": true
+  },
+  "acceptance_matrix": {
+    "profiles": 13,
+    "platforms": ["Windows", "iPhone", "Android phone", "iPad", "Android tablet"],
+    "checks": [
+      "one main navigation",
+      "one sidebar",
+      "legacy pseudo title removed",
+      "legacy body offset removed",
+      "correct adaptive mode",
+      "no horizontal overflow",
+      "usable content width",
+      "navigation exclusivity",
+      "five mobile tabs",
+      "minimum 16px mobile form font",
+      "rendered active content",
+      "viewport-fit cover",
+      "v9.2 release badge",
+      "adaptive shell marker"
+    ]
+  },
+  "preserved": {
+    "Pflege-inspired information architecture": true,
+    "legal content": true,
+    "deep lessons": 30,
+    "official norm records": 24,
+    "case briefs and teaching cases": 13,
+    "user state": true,
+    "offline support": true
+  },
+  "release_gates": {
+    "visible_runtime_badge": "v9.2.0",
+    "single_shell_only": true,
+    "legacy_masterkit_8_2_title_forbidden": true,
+    "state_reset": false,
+    "automated_matrix_required": true,
+    "physical_windows_iphone_ipad_acceptance_required": true,
+    "public_runtime_verification": true
+  }
+}
