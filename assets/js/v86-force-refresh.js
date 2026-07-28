@@ -1,8 +1,8 @@
 "use strict";
 (function(){
-  const RELEASE="8.6.1";
-  const EXPECTED_CACHE="lgmk-v8-6-mobile-acceptance-20260728c";
-  const RELOAD_GUARD="lgmk_v861_controller_reload";
+  const RELEASE="8.7.0";
+  const EXPECTED_CACHE="lgmk-v8-7-legal-evidence-20260728a";
+  const RELOAD_GUARD="lgmk_v870_controller_reload";
 
   function ensureBadge(){
     if(document.getElementById("v86ReleaseBadge"))return;
