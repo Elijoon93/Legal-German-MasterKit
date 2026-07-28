@@ -1,6 +1,6 @@
 "use strict";
 (function(){
-  const VERSION="9.3.1";
+  const VERSION=window.LGMK_RELEASE_VERSION||"9.3.1";
   const apply=()=>{
     const root=document.documentElement;
     root.dataset.release=VERSION;
