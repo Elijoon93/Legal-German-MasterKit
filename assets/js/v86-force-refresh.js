@@ -1,0 +1,45 @@
+"use strict";
+(function(){
+  const RELEASE="8.6.1";
+  const EXPECTED_CACHE="lgmk-v8-6-mobile-acceptance-20260728c";
+  const RELOAD_GUARD="lgmk_v861_controller_reload";
+
+  function ensureBadge(){
+    if(document.getElementById("v86ReleaseBadge"))return;
+    const topbar=document.querySelector(".topbar");
+    if(!topbar)return;
+    const badge=document.createElement("span");
+    badge.id="v86ReleaseBadge";
+    badge.textContent=`v${RELEASE}`;
+    badge.setAttribute("aria-label",`نسخه ${RELEASE}`);
+    badge.style.cssText="direction:ltr;unicode-bidi:isolate;flex:0 0 auto;padding:5px 8px;border-radius:999px;background:#0f6b68;color:#fff;font:700 11px/1 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:.04em;box-shadow:0 2px 8px rgba(15,107,104,.18)";
+    topbar.appendChild(badge);
+  }
+
+  async function purgeOldCaches(){
+    if(!("caches" in window))return;
+    const keys=await caches.keys();
+    await Promise.all(keys.filter(key=>key.startsWith("lgmk-")&&key!==EXPECTED_CACHE).map(key=>caches.delete(key)));
+  }
+
+  async function refreshWorkers(){
+    if(!("serviceWorker" in navigator))return;
+    const registrations=await navigator.serviceWorker.getRegistrations();
+    await Promise.all(registrations.map(registration=>registration.update().catch(()=>null)));
+  }
+
+  document.documentElement.dataset.release=RELEASE;
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",ensureBadge,{once:true});
+  else ensureBadge();
+  setTimeout(ensureBadge,500);
+
+  Promise.allSettled([purgeOldCaches(),refreshWorkers()]).finally(()=>{
+    try{localStorage.setItem("lgmk_runtime_release",RELEASE)}catch{}
+  });
+
+  navigator.serviceWorker?.addEventListener("controllerchange",()=>{
+    if(sessionStorage.getItem(RELOAD_GUARD))return;
+    sessionStorage.setItem(RELOAD_GUARD,"1");
+    location.reload();
+  });
+})();
