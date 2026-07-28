@@ -1,9 +1,10 @@
 "use strict";
 (function(){
-  const VERSION="9.3.2";
+  const VERSION=window.LGMK_RELEASE_VERSION||"9.3.2";
   const errors=[];
   const startedAt=Date.now();
   let recoveryAttempts=0;
+  let recoveryRunning=false;
   let ready=false;
 
   function messageOf(value){
@@ -26,8 +27,8 @@
     box.classList.toggle("failed",failed);
     const heading=box.querySelector("[data-startup-title]");
     const text=box.querySelector("[data-startup-detail]");
-    if(heading)heading.textContent=title;
-    if(text)text.textContent=detail;
+    if(heading&&heading.textContent!==title)heading.textContent=title;
+    if(text&&text.textContent!==detail)text.textContent=detail;
   }
   function showBootError(error){
     const panel=document.querySelector("#bootError");
@@ -41,9 +42,10 @@
   }
   function shellReady(){
     const layout=document.querySelector(".v90-layout");
-    const dashboard=document.querySelector("#dashboard.view.active");
-    const content=(dashboard?.textContent||"").trim();
-    return Boolean(layout&&document.querySelector("#mainNav .v90-sidebar")&&content.length>60);
+    const nav=document.querySelector("#mainNav .v90-sidebar,#mainNav .v90-mobile-nav");
+    const active=document.querySelector(".view.active");
+    const content=(active?.textContent||"").trim();
+    return Boolean(layout&&nav&&content.length>60);
   }
   function markReady(){
     if(ready)return;
@@ -58,16 +60,23 @@
   }
   function attemptRecovery(reason){
     if(ready||shellReady())return markReady();
+    if(recoveryRunning||recoveryAttempts>=1)return;
+    recoveryRunning=true;
     recoveryAttempts++;
     setStatus("در حال بازیابی راه‌اندازی",`${reason} · تلاش ${recoveryAttempts}`);
     try{
-      if(typeof window.boot==="function")window.boot();
-      else if(typeof window.buildNav==="function"&&typeof window.go==="function"){
+      if(typeof window.buildNav==="function"&&typeof window.go==="function"){
         window.buildNav();
-        window.go("dashboard");
+        const target=document.querySelector(".view.active")?.id||window.state?.view||"dashboard";
+        window.go(target);
+      }else if(typeof window.boot==="function"){
+        window.boot();
       }
     }catch(error){record("recovery",error);showBootError(error)}
-    setTimeout(()=>{if(shellReady())markReady()},300);
+    setTimeout(()=>{
+      recoveryRunning=false;
+      if(shellReady())markReady();
+    },450);
   }
   function finalCheck(){
     if(shellReady())return markReady();
@@ -75,16 +84,15 @@
     const detail=last?.text||"فایل‌های برنامه کامل اجرا نشدند. صفحه را یک‌بار بازآوری کنید.";
     showBootError(detail);
     const retry=document.querySelector("#retryBtn");
-    if(retry)retry.onclick=()=>location.replace(`${location.pathname}?v=932&t=${Date.now()}`);
+    if(retry)retry.onclick=()=>location.replace(`${location.pathname}?v=933&t=${Date.now()}`);
   }
 
   window.addEventListener("lgmk:ready",markReady,{once:true});
   document.addEventListener("DOMContentLoaded",()=>{
-    setStatus("در حال ساخت محیط مطالعه","فایل‌ها به‌صورت موازی دریافت شده‌اند؛ راه‌اندازی نهایی در حال انجام است.");
-    setTimeout(()=>attemptRecovery("کنترل اولیه"),1200);
-    setTimeout(()=>attemptRecovery("کنترل دوم"),4000);
-    setTimeout(()=>setStatus("بارگذاری روی اتصال کند ادامه دارد","در صورت کامل‌شدن فایل‌ها، محیط مطالعه خودکار نمایش داده می‌شود."),7500);
-    setTimeout(finalCheck,12000);
+    setStatus("در حال ساخت محیط مطالعه","فایل‌ها دریافت شده‌اند؛ راه‌اندازی نهایی در حال انجام است.");
+    setTimeout(()=>{if(shellReady())markReady();else attemptRecovery("کنترل اولیه")},900);
+    setTimeout(()=>{if(shellReady())markReady();else setStatus("بارگذاری ادامه دارد","در حال تکمیل رابط و داده‌های برنامه.")},3500);
+    setTimeout(finalCheck,9000);
   },{once:true});
-  window.LGMK_STARTUP={version:VERSION,attemptRecovery,markReady,record};
+  window.LGMK_STARTUP={version:VERSION,attemptRecovery,markReady,record,shellReady};
 })();
