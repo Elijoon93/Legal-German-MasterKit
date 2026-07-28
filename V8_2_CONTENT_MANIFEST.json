@@ -1,0 +1,39 @@
+{
+  "version": "8.2.0",
+  "release": "Professional Academic Platform",
+  "content": {
+    "legal_terms": 200,
+    "sentence_patterns": 100,
+    "reading_listening_texts": 20,
+    "legal_cases": 12,
+    "course_exams": 10,
+    "exam_questions": 60,
+    "speaking_tasks": 6,
+    "writing_modes": 5,
+    "books": 15,
+    "official_resources": 10
+  },
+  "functional_modules": [
+    "semester_planner",
+    "llm_curriculum",
+    "course_syllabi",
+    "academic_library",
+    "legal_lexicon",
+    "reading_lab",
+    "listening_lab",
+    "speaking_lab",
+    "writing_studio",
+    "research_workflow",
+    "case_lab",
+    "course_exams",
+    "learning_analytics"
+  ],
+  "static_acceptance": {
+    "javascript_syntax": "PASS",
+    "content_count_audit": "PASS",
+    "pwa_asset_manifest": "PASS",
+    "legacy_reading_replacement": "PASS",
+    "mobile_navigation_patch": "PASS"
+  },
+  "note": "Course offerings, required editions and instructor-specific rules must be checked against the current Friedolin and Moodle semester data."
+}
