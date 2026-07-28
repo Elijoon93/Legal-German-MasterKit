@@ -28,7 +28,7 @@
     "mobile_primary_tabs": 5,
     "desktop_sidebar_px": 260,
     "final_style_layer": "assets/css/v91-fidelity.css",
-    "final_architecture_layer": "assets/js/v91-architecture.js"
+    "final_runtime_layers": ["assets/js/v91-architecture.js", "assets/js/v91-device.js"]
   },
   "presentation": {
     "dark_hero_removed": true,
@@ -41,12 +41,29 @@
     "safe_area_supported": true,
     "minimum_ios_input_font_px": 16
   },
+  "device_acceptance": {
+    "profiles": 9,
+    "release_badge_checked": "v9.1.0",
+    "architecture_marker_checked": true,
+    "physical_iphone_ipad_required": true,
+    "checks": [
+      "horizontal overflow",
+      "shell width",
+      "five mobile tabs",
+      "navigation exclusivity",
+      "non-sticky header",
+      "iOS input font",
+      "rendered content",
+      "viewport-fit cover",
+      "v9.1 badge",
+      "v9.1 architecture"
+    ]
+  },
   "preserved": {
     "legal_content": true,
     "deep_lessons": 30,
     "official_norm_records": 24,
     "case_briefs_and_teaching_cases": 13,
-    "v9_device_acceptance": true,
     "user_state": true,
     "offline_support": true
   },
