@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {test,expect,chromium,webkit} from '@playwright/test';
 
-const VERSION='9.3.2';
+const VERSION='9.3.3';
 const ARTIFACT_ROOT=path.resolve('artifacts');
 const SCREENSHOT_ROOT=path.join(ARTIFACT_ROOT,'screenshots');
 const METRIC_ROOT=path.join(ARTIFACT_ROOT,'metrics');
@@ -32,7 +32,7 @@ function writeMetric(profile,data){
 async function inspect(page,profile){
   return page.evaluate(({expectedMode,version})=>{
     const root=document.documentElement,body=document.body;
-    const visible=element=>Boolean(element&&getComputedStyle(element).display!=='none'&&getComputedStyle(element).visibility!=='hidden');
+    const visible=element=>Boolean(element&&getComputedStyle(element).display!=='none'&&getComputedStyle(element).visibility!=='hidden'&&element.getBoundingClientRect().width>0&&element.getBoundingClientRect().height>0);
     const rect=selector=>{const el=document.querySelector(selector);if(!el)return null;const r=el.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}};
     const sidebar=document.querySelector('.v90-sidebar'),mobile=document.querySelector('.v90-mobile-nav');
     const content=document.querySelector('.v90-content'),shell=document.querySelector('.app-shell');
@@ -40,16 +40,19 @@ async function inspect(page,profile){
     const bodyStyle=getComputedStyle(body);
     const focusButtons=[...document.querySelectorAll('#v93StartFocus')].filter(visible);
     const advancedGroups=[...document.querySelectorAll('.v93-advanced-group')].filter(visible);
+    const compactLabels=[...document.querySelectorAll('#mainNav .v90-nav-groups button b')].filter(visible);
     return{
       mode:root.dataset.deviceMode,
       orientation:root.dataset.orientation,
       release:root.dataset.release,
+      runtimeStable:root.dataset.runtimeStable,
       learningOs:root.dataset.learningOs,
       shellMarker:root.dataset.shell,
       appReady:root.dataset.appReady,
       bootState:window.__LGMK_BOOT_STATE,
       startupVisible:visible(document.querySelector('#startupStatus')),
       startupErrors:window.LGMK_STARTUP_DIAGNOSTICS?.errors||[],
+      stability:window.LGMK_RUNTIME_STABILITY||null,
       title:document.title,
       viewport:{width:innerWidth,height:innerHeight},
       rootScrollWidth:root.scrollWidth,
@@ -61,9 +64,11 @@ async function inspect(page,profile){
       sidebarVisible:visible(sidebar),
       mobileNavVisible:visible(mobile),
       mobileTabCount:mobile?.querySelectorAll('button[data-view]').length||0,
+      compactVisibleLabels:compactLabels.length,
       focusCtaCount:focusButtons.length,
       oldTitlePresent:document.body.innerText.includes('MASTERKIT 8.2'),
       advancedGroupVisible:advancedGroups.length>0,
+      sidebarRect:rect('.v90-sidebar'),
       contentRect:rect('.v90-content'),
       shellRect:rect('.app-shell'),
       topbarRect:rect('.topbar'),
@@ -76,7 +81,7 @@ async function inspect(page,profile){
 }
 
 for(const profile of PROFILES){
-  test(`${profile.label} — startup, shell, learning flow and screenshots`,async({baseURL})=>{
+  test(`${profile.label} — stable startup, shell, learning flow and screenshots`,async({baseURL})=>{
     const browserType=profile.engine==='webkit'?webkit:chromium;
     const browser=await browserType.launch({headless:true});
     const context=await browser.newContext({
@@ -96,8 +101,9 @@ for(const profile of PROFILES){
       if(message.type()==='error'&&!/Failed to load resource|favicon/i.test(message.text()))consoleErrors.push(message.text());
     });
     const root=String(baseURL||'').replace(/\/$/,'');
-    await page.goto(`${root}/?v=932&visual=${profile.id}`,{waitUntil:'domcontentloaded'});
+    await page.goto(`${root}/?v=933&visual=${profile.id}`,{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.documentElement.dataset.appReady==='true',{timeout:15_000});
+    await page.waitForFunction(()=>document.documentElement.dataset.runtimeStable==='true',{timeout:15_000});
     await page.waitForFunction(()=>document.documentElement.dataset.learningOs==='dual-reference-v93');
     await expect(page.locator('.v93-home')).toBeVisible();
     await expect(page.locator('#startupStatus')).toHaveCount(0);
@@ -107,6 +113,7 @@ for(const profile of PROFILES){
     const metrics=await inspect(page,profile);
     writeMetric(profile,{metrics,pageErrors,consoleErrors});
     expect(metrics.appReady).toBe('true');
+    expect(metrics.runtimeStable).toBe('true');
     expect(metrics.bootState).toBe('ready');
     expect(metrics.startupVisible).toBeFalsy();
     expect(metrics.startupErrors).toEqual([]);
@@ -127,6 +134,11 @@ for(const profile of PROFILES){
     expect(metrics.activeText).toBeGreaterThan(100);
     expect(metrics.contentRect?.right||0).toBeLessThanOrEqual(profile.width+1);
     expect(metrics.contentRect?.x||0).toBeGreaterThanOrEqual(-1);
+    if(profile.mode==='compact'){
+      expect(metrics.compactVisibleLabels).toBe(0);
+      expect(metrics.sidebarRect?.width||0).toBeGreaterThanOrEqual(86);
+      expect(metrics.sidebarRect?.width||0).toBeLessThanOrEqual(90);
+    }
     if(['phone','tablet'].includes(profile.mode)){
       expect(metrics.mobileNavVisible).toBeTruthy();
       expect(metrics.sidebarVisible).toBeFalsy();
