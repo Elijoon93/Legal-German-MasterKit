@@ -1,6 +1,7 @@
 "use strict";
 (function(){
-  const VERSION="9.2.0";
+  const VERSION=window.LGMK_RELEASE_VERSION||"9.2.0";
+  const BUILD=VERSION.replace(/\./g,"");
   const PROFILES=[
     {id:"iphone-se",label:"iPhone SE",width:375,height:667,type:"phone"},
     {id:"iphone-15",label:"iPhone 15",width:393,height:852,type:"phone"},
@@ -52,22 +53,22 @@
   }
   function runProfile(profile){
     return new Promise(resolve=>{
-      const frame=document.createElement("iframe");frame.title=`v9.2 QA ${profile.label}`;frame.width=String(profile.width);frame.height=String(profile.height);frame.style.cssText=`position:fixed;left:-16000px;top:0;width:${profile.width}px;height:${profile.height}px;border:0;opacity:.01;pointer-events:none;`;
+      const frame=document.createElement("iframe");frame.title=`${VERSION} QA ${profile.label}`;frame.width=String(profile.width);frame.height=String(profile.height);frame.style.cssText=`position:fixed;left:-16000px;top:0;width:${profile.width}px;height:${profile.height}px;border:0;opacity:.01;pointer-events:none;`;
       const timer=setTimeout(()=>{frame.remove();resolve({...profile,checks:{load:false},pass:false,error:"timeout"})},10000);
       frame.onload=()=>setTimeout(()=>{try{frame.contentWindow?.go?.("dashboard");const result=collect(frame.contentDocument,profile);clearTimeout(timer);frame.remove();resolve(result)}catch(error){clearTimeout(timer);frame.remove();resolve({...profile,checks:{access:false},pass:false,error:error.message})}},900);
-      frame.src=`./?v=920&qa92=${encodeURIComponent(profile.id)}&t=${Date.now()}`;document.body.appendChild(frame);
+      frame.src=`./?v=${BUILD}&qa=${encodeURIComponent(profile.id)}&t=${Date.now()}`;document.body.appendChild(frame);
     });
   }
   async function runMatrix(){
     state.deviceAcceptance=state.deviceAcceptance||{manual:{},lastMatrix:[],lastRun:null,current:null};state.deviceAcceptance.manual=state.deviceAcceptance.manual||{};state.deviceAcceptance.lastMatrix=[];state.deviceAcceptance.lastRun=new Date().toISOString();save();render("deviceAcceptance");
     const rows=[];for(const profile of PROFILES){const row=await runProfile(profile);rows.push(row);state.deviceAcceptance.lastMatrix=[...rows];save();render("deviceAcceptance")}
-    if(typeof v82Toast==="function")v82Toast(rows.every(x=>x.pass)?"ماتریس تطبیقی v9.2 PASS شد.":"حداقل یک پروفایل تطبیقی شکست خورد.",!rows.every(x=>x.pass));
+    if(typeof v82Toast==="function")v82Toast(rows.every(x=>x.pass)?`ماتریس تطبیقی ${VERSION} PASS شد.`:`حداقل یک پروفایل ${VERSION} شکست خورد.`,!rows.every(x=>x.pass));
   }
   function renderDevice(el){
     state.deviceAcceptance=state.deviceAcceptance||{manual:{},lastMatrix:[],lastRun:null,current:null};state.deviceAcceptance.manual=state.deviceAcceptance.manual||{};
     const current=collect(document,{id:"current",label:"دستگاه فعلی",type:document.documentElement.dataset.deviceMode});state.deviceAcceptance.current=current;save();
     const rows=state.deviceAcceptance.lastMatrix||[],map=new Map(rows.map(x=>[x.profile,x]));
-    el.innerHTML=`<header class="v91-page-head"><div><span>ADAPTIVE DEVICE ACCEPTANCE</span><h2>پذیرش Windows، Tablet و Phone</h2><p>وجود فقط یک Shell، حذف کامل Offset نسخه 8.2، فضای قابل استفاده محتوا، حالت ناوبری و نشان v9.2 کنترل می‌شوند.</p></div><div class="v91-head-actions"><button id="v92RunMatrix">اجرای ماتریس ۱۳ دستگاه</button></div></header><section class="v91-hub-summary">${metric("حالت فعلی",current.mode.toUpperCase(),`${current.width}×${current.height}`)}${metric("عرض محتوا",`${current.contentWidth}px`,current.pass?"PASS":"FAIL")}${metric("Runtime",`v${VERSION}`,document.documentElement.dataset.shell==="adaptive-v92"?"Adaptive":"FAIL")}${metric("ماتریس",`${rows.length}/${PROFILES.length}`,rows.length===PROFILES.length&&rows.every(x=>x.pass)?"PASS":"PENDING")}</section><section class="v91-panel"><div class="v90-check-grid">${Object.entries(current.checks).map(([key,value])=>`<article class="${value?"pass":"fail"}"><b>${value?"PASS":"FAIL"}</b><span>${key}</span></article>`).join("")}</div></section><section class="v91-panel"><div class="v90-device-table"><div class="head"><b>پروفایل</b><b>اندازه / حالت</b><b>خودکار</b><b>تأیید واقعی</b></div>${PROFILES.map(profile=>{const result=map.get(profile.id),manual=Boolean(state.deviceAcceptance.manual[profile.id]);return`<div><span><b>${profile.label}</b><small>${result?.mode||profile.type}</small></span><code>${profile.width}×${profile.height}</code><strong class="${result?.pass?"pass":result?"fail":"pending"}">${result?.pass?"PASS":result?"FAIL":"PENDING"}</strong><label><input type="checkbox" data-v92-physical="${profile.id}" ${manual?"checked":""}> مشاهده واقعی</label></div>`}).join("")}</div></section>`;
+    el.innerHTML=`<header class="v91-page-head"><div><span>ADAPTIVE DEVICE ACCEPTANCE</span><h2>پذیرش Windows، Tablet و Phone</h2><p>وجود فقط یک Shell، حذف کامل Offset قدیمی، فضای قابل استفاده محتوا، حالت ناوبری و نشان ${VERSION} کنترل می‌شوند.</p></div><div class="v91-head-actions"><button id="v92RunMatrix">اجرای ماتریس ۱۳ دستگاه</button></div></header><section class="v91-hub-summary">${metric("حالت فعلی",current.mode.toUpperCase(),`${current.width}×${current.height}`)}${metric("عرض محتوا",`${current.contentWidth}px`,current.pass?"PASS":"FAIL")}${metric("Runtime",`v${VERSION}`,document.documentElement.dataset.shell==="adaptive-v92"?"Adaptive":"FAIL")}${metric("ماتریس",`${rows.length}/${PROFILES.length}`,rows.length===PROFILES.length&&rows.every(x=>x.pass)?"PASS":"PENDING")}</section><section class="v91-panel"><div class="v90-check-grid">${Object.entries(current.checks).map(([key,value])=>`<article class="${value?"pass":"fail"}"><b>${value?"PASS":"FAIL"}</b><span>${key}</span></article>`).join("")}</div></section><section class="v91-panel"><div class="v90-device-table"><div class="head"><b>پروفایل</b><b>اندازه / حالت</b><b>خودکار</b><b>تأیید واقعی</b></div>${PROFILES.map(profile=>{const result=map.get(profile.id),manual=Boolean(state.deviceAcceptance.manual[profile.id]);return`<div><span><b>${profile.label}</b><small>${result?.mode||profile.type}</small></span><code>${profile.width}×${profile.height}</code><strong class="${result?.pass?"pass":result?"fail":"pending"}">${result?.pass?"PASS":result?"FAIL":"PENDING"}</strong><label><input type="checkbox" data-v92-physical="${profile.id}" ${manual?"checked":""}> مشاهده واقعی</label></div>`}).join("")}</div></section>`;
   }
   const previousRender=window.render;
   window.render=function(view){if(view==="deviceAcceptance")return renderDevice(document.getElementById(view));return previousRender(view)};
