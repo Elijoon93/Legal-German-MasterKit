@@ -34,6 +34,7 @@ html[data-device-mode="tablet"] .v93-focus-dialog,html[data-device-mode="phone"]
 html[data-device-mode="tablet"] .v93-overlay,html[data-device-mode="phone"] .v93-overlay{padding:0!important}
 html[data-device-mode="tablet"] .v93-tools-overlay,html[data-device-mode="phone"] .v93-tools-overlay{padding:0!important}
 html[data-device-mode="tablet"] input,html[data-device-mode="tablet"] select,html[data-device-mode="tablet"] textarea,html[data-device-mode="phone"] input,html[data-device-mode="phone"] select,html[data-device-mode="phone"] textarea{font-size:16px!important}
+html[data-device-mode="tablet"] .v93-focus-dialog>footer,html[data-device-mode="phone"] .v93-focus-dialog>footer{padding-bottom:calc(12px + env(safe-area-inset-bottom))!important}
 
 html[data-device-mode="phone"] .v90-topbar{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important}
 html[data-device-mode="phone"] .v90-topbar>div:first-child{min-width:0!important}
