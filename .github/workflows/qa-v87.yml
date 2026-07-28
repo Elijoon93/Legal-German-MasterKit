@@ -22,3 +22,5 @@ jobs:
           node-version: '22'
       - name: Run v8.7 quality gates
         run: node scripts/qa-v87.mjs
+      - name: Run v8.8 quality gates
+        run: node scripts/qa-v88.mjs
