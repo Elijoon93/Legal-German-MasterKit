@@ -4,8 +4,8 @@ import {spawnSync} from 'node:child_process';
 
 const VERSION='9.3.4';
 const required=[
-  'index.html','manifest-v934.webmanifest','service-worker-v934.js','release-v9.3.4.json',
-  'assets/js/v934-acceptance-automation.js','assets/js/v934-sw-register-final.js','assets/css/v934-acceptance.css',
+  'index.html','manifest-v934.webmanifest','service-worker-v934b.js','release-v9.3.4.json',
+  'assets/js/v934-acceptance-automation.js','assets/js/v934-sw-register-safe.js','assets/css/v934-acceptance.css',
   'assets/js/v933-stability.js','assets/css/v933-runtime-stability.css','assets/js/v932-startup.js',
   'assets/js/v931-visual-guard.js','assets/js/v92-adaptive.js','assets/js/v92-device.js',
   'assets/js/v93-learning-os.js','assets/js/v87-legal-evidence-data.js','assets/js/v88-deep-lessons-data.js',
@@ -30,8 +30,8 @@ for(const file of ['tests/visual-acceptance.spec.mjs','playwright.config.mjs','s
 
 for(const token of [
   'Legal German MasterKit v9.3.4','manifest-v934.webmanifest','LGMK_RELEASE_VERSION="9.3.4"',
-  'lgmk-v9-3-4-acceptance-automation-20260728a','v934-acceptance.css?v=934',
-  'v934-acceptance-automation.js?v=934','v934-sw-register-final.js?v=934','v92-device.js?v=934'
+  'lgmk-v9-3-4-acceptance-automation-20260728b','v934-acceptance.css?v=934',
+  'v934-acceptance-automation.js?v=934','v934-sw-register-safe.js?v=9341','v92-device.js?v=934'
 ])index.includes(token)?pass('index token',token):fail('index token',token);
 const parserBlocking=externalTags.filter(tag=>tag.file!=='assets/js/v932-startup.js'&&!/\bdefer\b/.test(tag.attrs));
 parserBlocking.length===0?pass('parser-blocking external scripts','0'):fail('parser-blocking external scripts',parserBlocking.map(x=>x.file).join(', '));
@@ -79,10 +79,11 @@ const stability=fs.readFileSync('assets/js/v933-stability.js','utf8');
 const manifest=JSON.parse(fs.readFileSync('manifest-v934.webmanifest','utf8'));
 manifest.name.includes(VERSION)?pass('manifest version',manifest.name):fail('manifest version',manifest.name);
 manifest.start_url.includes(VERSION)?pass('manifest start URL',manifest.start_url):fail('manifest start URL',manifest.start_url);
-const sw=fs.readFileSync('service-worker-v934.js','utf8');
-for(const token of ['lgmk-v9-3-4-acceptance-automation','release-v9.3.4.json','manifest-v934.webmanifest','v934-acceptance.css?v=934','v934-acceptance-automation.js?v=934','v934-sw-register-final.js?v=934'])sw.includes(token)?pass('service worker token',token):fail('service worker token',token);
-const swRegister=fs.readFileSync('assets/js/v934-sw-register-final.js','utf8');
-for(const token of ['service-worker-v934.js?v=934','getRegistrations','unregister','LGMK_SW_V934'])swRegister.includes(token)?pass('SW registration token',token):fail('SW registration token',token);
+const sw=fs.readFileSync('service-worker-v934b.js','utf8');
+for(const token of ['lgmk-v9-3-4-acceptance-automation-20260728b','release-v9.3.4.json','manifest-v934.webmanifest','v934-acceptance.css?v=934','v934-acceptance-automation.js?v=934','v934-sw-register-safe.js?v=9341'])sw.includes(token)?pass('service worker token',token):fail('service worker token',token);
+const swRegister=fs.readFileSync('assets/js/v934-sw-register-safe.js','utf8');
+for(const token of ['service-worker-v934b.js?v=9341','updateViaCache:"none"','registration.waiting','LGMK_SW_V934'])swRegister.includes(token)?pass('SW registration token',token):fail('SW registration token',token);
+!swRegister.includes('unregister(')?pass('safe SW upgrade without unregister'):fail('unsafe SW unregister found');
 
 const testFile=fs.readFileSync('tests/visual-acceptance.spec.mjs','utf8');
 const profileBlock=testFile.match(/const PROFILES=\[(.*?)\];/s)?.[1]||'';
@@ -90,4 +91,4 @@ const profileBlock=testFile.match(/const PROFILES=\[(.*?)\];/s)?.[1]||'';
 for(const token of ["const VERSION='9.3.4'",'?v=934&visual=','window.LGMK_V934?.report','#deviceAcceptance .v934-acceptance','lgmk-device-acceptance-report/v1'])testFile.includes(token)?pass('visual automation token',token):fail('visual automation token',token);
 
 if(failed){console.error(`\n${failed} cumulative v9.3.4 gate(s) failed.`);process.exit(1)}
-console.log('\nAll cumulative v9.3.4 acceptance automation, evidence, stability, content and device gates passed.');
+console.log('\nAll cumulative v9.3.4 acceptance automation, evidence, safe PWA upgrade, stability, content and device gates passed.');
