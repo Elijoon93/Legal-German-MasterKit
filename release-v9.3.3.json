@@ -1,0 +1,48 @@
+{
+  "version": "9.3.3",
+  "release": "Runtime Freeze Elimination",
+  "scope": "Stability remediation only; no new menu, learning module or content feature.",
+  "confirmed_root_causes": [
+    "ResizeObserver observed the root element while its callback changed root CSS variables and dataset values.",
+    "MutationObserver observed the navigation subtree while its callback rewrote navigation textContent.",
+    "Startup recovery could execute boot more than once when a non-dashboard route was active.",
+    "Offline cache repair competed with startup by scanning and fetching active assets immediately after DOMContentLoaded.",
+    "Compact rail labels were not hidden because an older #mainNav !important selector had higher specificity."
+  ],
+  "runtime_changes": {
+    "resize_observer_removed": true,
+    "mutation_observer_removed": true,
+    "adaptive_normalization_idempotent": true,
+    "duplicate_boot_recovery_forbidden": true,
+    "maximum_recovery_attempts": 1,
+    "active_route_readiness_supported": true,
+    "cache_repair_runs_after_ready_and_idle": true,
+    "one_shot_runtime_convergence": true,
+    "persistent_polling_added": false
+  },
+  "compact_windows": {
+    "rail_width_px": 88,
+    "labels_hidden_with_id_specific_selector": true,
+    "rail_horizontal_overflow_forbidden": true,
+    "content_column_minmax_zero": true
+  },
+  "preserved": {
+    "dual_reference_learning_os": true,
+    "physical_visual_acceptance": true,
+    "adaptive_modes": ["desktop", "compact", "tablet", "phone"],
+    "legal_content": true,
+    "user_state": true,
+    "offline_support": true
+  },
+  "acceptance_gates": {
+    "firefox_slow_page_warning_forbidden": true,
+    "resize_observer_in_adaptive_runtime_forbidden": true,
+    "mutation_observer_in_visual_guard_forbidden": true,
+    "runtime_stable_marker_required": true,
+    "single_sidebar_required": true,
+    "compact_label_clipping_forbidden": true,
+    "startup_status_must_disappear": true,
+    "visible_runtime_badge": "v9.3.3",
+    "state_reset": false
+  }
+}
