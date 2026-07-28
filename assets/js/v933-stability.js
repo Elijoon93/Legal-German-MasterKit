@@ -16,7 +16,7 @@
 
     const active=document.querySelector(".view.active");
     const contentLength=(active?.textContent||"").trim().length;
-    const ready=Boolean(document.querySelector(".v90-layout")&&sidebars.length>=1&&contentLength>60);
+    const ready=Boolean(document.querySelector(".v90-layout")&&document.querySelector(".v90-sidebar")&&contentLength>60);
     if(!ready)return;
 
     settled=true;
@@ -34,6 +34,9 @@
       activeView:active?.id||null,
       contentLength
     };
+    if(active?.id==="deviceAcceptance"&&typeof window.render==="function"){
+      queueMicrotask(()=>window.render("deviceAcceptance"));
+    }
   }
   function schedule(){
     requestAnimationFrame(()=>requestAnimationFrame(converge));
