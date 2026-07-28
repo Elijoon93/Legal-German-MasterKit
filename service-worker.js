@@ -1,5 +1,5 @@
-const CACHE='lgmk-v7-5-1-stable-20260728';
-const ASSETS=['./','./index.html','./assets/css/style.css?v=751','./assets/js/app.js?v=751','./manifest.webmanifest','./icon.svg'];
+const CACHE='lgmk-v7-6-task-menus-20260728';
+const ASSETS=['./','./index.html','./assets/css/style.css?v=760','./assets/js/app.js?v=760','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
