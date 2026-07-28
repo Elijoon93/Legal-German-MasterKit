@@ -9,7 +9,7 @@
     "legacy_visual_patches_removed": ["v84-pflege-inspired.css", "v86-mobile-acceptance.css", "v86-mobile-hotfix.css", "v89-architecture.css"],
     "feature_styles_preserved": ["style.css", "v82-professional.css", "v83-depth.css", "v85-workspace.css", "v87-evidence.css", "v88-deep.css"],
     "final_foundation": "assets/css/v90-foundation.css",
-    "final_shell": "assets/js/v90-shell.js"
+    "final_runtime": ["assets/js/v90-shell.js", "assets/js/v90-routing.js"]
   },
   "device_acceptance": {
     "profiles": 9,
