@@ -7,6 +7,7 @@
   root.classList.toggle("v86-ios",isIOS);
   body.classList.toggle("v86-standalone",isStandalone);
   let baseHeight=Math.max(window.innerHeight,document.documentElement.clientHeight||0);
+  function resetBaseHeight(){baseHeight=Math.max(window.innerHeight,document.documentElement.clientHeight||0)}
   function updateViewport(){
     const vv=window.visualViewport;
     const height=Math.round(vv?.height||window.innerHeight||document.documentElement.clientHeight);
@@ -19,11 +20,11 @@
   }
   updateViewport();
   window.addEventListener("resize",updateViewport,{passive:true});
-  window.addEventListener("orientationchange",()=>setTimeout(updateViewport,120),{passive:true});
+  window.addEventListener("orientationchange",()=>setTimeout(()=>{resetBaseHeight();updateViewport()},180),{passive:true});
   window.visualViewport?.addEventListener("resize",updateViewport,{passive:true});
   window.visualViewport?.addEventListener("scroll",updateViewport,{passive:true});
   document.addEventListener("focusin",()=>setTimeout(updateViewport,80));
-  document.addEventListener("focusout",()=>setTimeout(()=>{baseHeight=Math.max(window.innerHeight,document.documentElement.clientHeight||0);updateViewport()},180));
+  document.addEventListener("focusout",()=>setTimeout(()=>{resetBaseHeight();updateViewport()},180));
   document.addEventListener("click",event=>{
     const navTarget=event.target.closest("#mainNav [data-view]");
     if(navTarget){
@@ -36,5 +37,5 @@
       body.classList.remove("v84-lock");
     }
   },true);
-  window.addEventListener("pageshow",updateViewport,{passive:true});
+  window.addEventListener("pageshow",()=>{resetBaseHeight();updateViewport()},{passive:true});
 })();
