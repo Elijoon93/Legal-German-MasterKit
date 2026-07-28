@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {test,expect,chromium,webkit} from '@playwright/test';
 
-const VERSION='9.3.1';
+const VERSION='9.3.2';
 const ARTIFACT_ROOT=path.resolve('artifacts');
 const SCREENSHOT_ROOT=path.join(ARTIFACT_ROOT,'screenshots');
 const METRIC_ROOT=path.join(ARTIFACT_ROOT,'metrics');
@@ -46,6 +46,10 @@ async function inspect(page,profile){
       release:root.dataset.release,
       learningOs:root.dataset.learningOs,
       shellMarker:root.dataset.shell,
+      appReady:root.dataset.appReady,
+      bootState:window.__LGMK_BOOT_STATE,
+      startupVisible:visible(document.querySelector('#startupStatus')),
+      startupErrors:window.LGMK_STARTUP_DIAGNOSTICS?.errors||[],
       title:document.title,
       viewport:{width:innerWidth,height:innerHeight},
       rootScrollWidth:root.scrollWidth,
@@ -72,7 +76,7 @@ async function inspect(page,profile){
 }
 
 for(const profile of PROFILES){
-  test(`${profile.label} — shell, learning flow and screenshots`,async({baseURL})=>{
+  test(`${profile.label} — startup, shell, learning flow and screenshots`,async({baseURL})=>{
     const browserType=profile.engine==='webkit'?webkit:chromium;
     const browser=await browserType.launch({headless:true});
     const context=await browser.newContext({
@@ -92,14 +96,20 @@ for(const profile of PROFILES){
       if(message.type()==='error'&&!/Failed to load resource|favicon/i.test(message.text()))consoleErrors.push(message.text());
     });
     const root=String(baseURL||'').replace(/\/$/,'');
-    await page.goto(`${root}/?v=931&visual=${profile.id}`,{waitUntil:'domcontentloaded'});
+    await page.goto(`${root}/?v=932&visual=${profile.id}`,{waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>document.documentElement.dataset.appReady==='true',{timeout:15_000});
     await page.waitForFunction(()=>document.documentElement.dataset.learningOs==='dual-reference-v93');
     await expect(page.locator('.v93-home')).toBeVisible();
+    await expect(page.locator('#startupStatus')).toHaveCount(0);
     await expect(page.locator('#v90ReleaseBadge')).toContainText(VERSION);
     await page.screenshot({path:path.join(SCREENSHOT_ROOT,`${profile.id}-dashboard.png`),fullPage:true});
 
     const metrics=await inspect(page,profile);
     writeMetric(profile,{metrics,pageErrors,consoleErrors});
+    expect(metrics.appReady).toBe('true');
+    expect(metrics.bootState).toBe('ready');
+    expect(metrics.startupVisible).toBeFalsy();
+    expect(metrics.startupErrors).toEqual([]);
     expect(metrics.mode).toBe(profile.mode);
     expect(metrics.release).toBe(VERSION);
     expect(metrics.learningOs).toBe('dual-reference-v93');
