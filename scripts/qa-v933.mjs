@@ -31,9 +31,9 @@ for(const file of ['playwright.config.mjs','tests/visual-acceptance.spec.mjs','s
 
 for(const token of [
   'Legal German MasterKit v9.3.3','manifest.webmanifest?v=933','LGMK_RELEASE_VERSION="9.3.3"',
-  'LGMK_CACHE_NAME="lgmk-v9-3-3-runtime-stability-20260728a"','v933-runtime-stability.css?v=933',
-  'v932-startup.js?v=933','v92-adaptive.js?v=933','v93-cache-repair.js?v=933','v931-visual-guard.js?v=933',
-  'v933-stability.js?v=933','app-views2.js?v=933','id="startupStatus"'
+  'LGMK_CACHE_NAME="lgmk-v9-3-3-runtime-stability-20260728b"','v933-runtime-stability.css?v=933',
+  'v932-startup.js?v=933','v92-adaptive.js?v=933','v92-device.js?v=9331','v93-cache-repair.js?v=933',
+  'v931-visual-guard.js?v=933','v933-stability.js?v=9331','app-views2.js?v=933','id="startupStatus"'
 ])index.includes(token)?pass('index token',token):fail('index token',token);
 
 const parserBlocking=externalTags.filter(tag=>tag.file!=='assets/js/v932-startup.js'&&!/\bdefer\b/.test(tag.attrs));
@@ -69,6 +69,9 @@ release.runtime_changes?.mutation_observer_removed===true?pass('MutationObserver
 release.runtime_changes?.maximum_recovery_attempts===1?pass('single recovery attempt'):fail('recovery attempt count');
 release.runtime_changes?.cache_repair_runs_after_ready_and_idle===true?pass('idle cache repair'):fail('idle cache repair');
 release.runtime_changes?.persistent_polling_added===false?pass('no persistent polling'):fail('persistent polling');
+release.device_acceptance_hotfix?.sample_only_after_app_ready===true&&release.device_acceptance_hotfix?.sample_only_after_runtime_stable===true?pass('post-ready acceptance sampling'):fail('post-ready acceptance sampling');
+release.device_acceptance_hotfix?.stale_release_results_ignored===true?pass('stale acceptance filtering'):fail('stale acceptance filtering');
+release.device_acceptance_hotfix?.width_status_independent_from_global_status===true?pass('independent width status'):fail('independent width status');
 release.compact_windows?.rail_width_px===88&&release.compact_windows?.labels_hidden_with_id_specific_selector===true?pass('compact rail contract'):fail('compact rail contract');
 release.acceptance_gates?.state_reset===false?pass('state preservation'):fail('state preservation');
 
@@ -76,6 +79,11 @@ const adaptive=fs.readFileSync('assets/js/v92-adaptive.js','utf8');
 !adaptive.includes('ResizeObserver')?pass('adaptive ResizeObserver absent'):fail('adaptive ResizeObserver remains');
 !adaptive.includes('visualViewport?.addEventListener("scroll"')?pass('visualViewport scroll listener absent'):fail('visualViewport scroll listener remains');
 for(const token of ['lastSignature','setData','setVar','signature===lastSignature','requestAnimationFrame(()=>normalizeShell'])adaptive.includes(token)?pass('idempotent adaptive token',token):fail('idempotent adaptive token',token);
+
+const device=fs.readFileSync('assets/js/v92-device.js','utf8');
+for(const token of ['waitForStable','dataset.runtimeStable==="true"','dataset.appReady==="true"','await nextFrame(win);await nextFrame(win)','row?.version===VERSION','current.checks.contentUsable','current.failingChecks.join','profile_timeout_ms'.replace('profile_timeout_ms','15000')])device.includes(token)?pass('stable device token',token):fail('stable device token',token);
+!device.includes('current.pass?"PASS":"FAIL"')?pass('width no longer uses global pass'):fail('width still uses global pass');
+!device.includes('setTimeout(()=>{try{frame.contentWindow')?pass('fixed-delay profile sampling removed'):fail('fixed-delay profile sampling remains');
 
 const guard=fs.readFileSync('assets/js/v931-visual-guard.js','utf8');
 !guard.includes('MutationObserver')?pass('visual MutationObserver absent'):fail('visual MutationObserver remains');
@@ -90,7 +98,7 @@ for(const token of ['requestIdleCallback','lgmk:ready','dataset.appReady','setTi
 !repair.includes('setTimeout(()=>repair()')?pass('eager cache repair removed'):fail('eager cache repair remains');
 
 const stability=fs.readFileSync('assets/js/v933-stability.js','utf8');
-for(const token of ['runtimeStable="true"','LGMK_RUNTIME_STABILITY','sidebars.slice(1)','requestAnimationFrame(()=>requestAnimationFrame(converge))'])stability.includes(token)?pass('stability token',token):fail('stability token',token);
+for(const token of ['runtimeStable="true"','LGMK_RUNTIME_STABILITY','sidebars.slice(1)','requestAnimationFrame(()=>requestAnimationFrame(converge))','active?.id==="deviceAcceptance"','window.render("deviceAcceptance")'])stability.includes(token)?pass('stability token',token):fail('stability token',token);
 !stability.includes('MutationObserver')&&!stability.includes('ResizeObserver')&&!stability.includes('setInterval')?pass('one-shot stability runtime'):fail('persistent stability observer found');
 
 const stabilityCss=fs.readFileSync('assets/css/v933-runtime-stability.css','utf8');
@@ -115,10 +123,10 @@ manifest.start_url.includes('9.3.3')?pass('manifest start URL',manifest.start_ur
 manifest.display==='standalone'?pass('manifest display','standalone'):fail('manifest display',manifest.display);
 
 const sw=fs.readFileSync('service-worker.js','utf8');
-for(const token of ['lgmk-v9-3-3-runtime-stability','release-v9.3.3.json','manifest.webmanifest?v=933','v933-runtime-stability.css?v=933','v933-stability.js?v=933','app-views2.js?v=933'])sw.includes(token)?pass('cache token',token):fail('cache token',token);
+for(const token of ['lgmk-v9-3-3-runtime-stability-20260728b','release-v9.3.3.json','manifest.webmanifest?v=933','v933-runtime-stability.css?v=933','v92-device.js?v=9331','v933-stability.js?v=9331','app-views2.js?v=933'])sw.includes(token)?pass('cache token',token):fail('cache token',token);
 
 const workflow=fs.readFileSync('.github/workflows/qa-v87.yml','utf8');
 for(const token of ['node scripts/qa-v933.mjs','playwright install --with-deps chromium webkit','npm run qa:visual','actions/upload-artifact@v4','runtime-stability-v9.3.3'])workflow.includes(token)?pass('workflow token',token):fail('workflow token',token);
 
 if(failed){console.error(`\n${failed} cumulative v9.3.3 gate(s) failed.`);process.exit(1)}
-console.log('\nAll cumulative v9.3.3 runtime stability, compact rail, content, cache and visual-device gates passed.');
+console.log('\nAll cumulative v9.3.3 runtime stability, truthful device acceptance, compact rail, content, cache and visual-device gates passed.');
