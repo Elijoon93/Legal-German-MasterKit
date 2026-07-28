@@ -1,0 +1,81 @@
+{
+  "version": "9.3.1",
+  "release": "Automated Visual Acceptance and Regression Harness",
+  "scope": "Device acceptance, screenshot evidence and cross-browser layout hardening only; no legal subject data replacement.",
+  "engines": {
+    "playwright_test": "1.61.1",
+    "browsers": ["Chromium", "WebKit"],
+    "local_source_server": "Python HTTP server",
+    "public_runtime_url": "https://elijoon93.github.io/Legal-German-MasterKit/?v=931"
+  },
+  "profiles": [
+    "iPhone SE",
+    "iPhone 15",
+    "iPhone Pro Max",
+    "Android Compact",
+    "Android Modern",
+    "iPad Portrait",
+    "iPad Landscape",
+    "Android Tablet",
+    "Windows Split View",
+    "Windows Compact",
+    "Windows Laptop",
+    "Windows Desktop",
+    "Wide Desktop"
+  ],
+  "assertions": [
+    "v9.3.1 release marker",
+    "adaptive device mode",
+    "one main navigation",
+    "one sidebar node",
+    "legacy MASTERKIT 8.2 title absent",
+    "legacy body offsets absent",
+    "no horizontal document overflow",
+    "content bounds remain inside viewport",
+    "correct sidebar or bottom navigation exclusivity",
+    "five mobile primary tabs",
+    "one dominant dashboard focus action",
+    "advanced tools hidden from learner navigation",
+    "five focus-session stages",
+    "eight legal competency nodes",
+    "no uncaught page or console errors"
+  ],
+  "evidence_artifacts": {
+    "dashboard_screenshots": 13,
+    "focus_session_screenshots": 13,
+    "competency_screenshots": 13,
+    "profile_metric_files": 13,
+    "html_report": true,
+    "json_report": true,
+    "trace_and_video_on_failure": true,
+    "retention_days": 14
+  },
+  "responsive_hardening": [
+    "header text and action containment",
+    "safe inline spacing",
+    "phone and tablet full-height focus dialog",
+    "iOS safe-area bottom navigation",
+    "small-phone one-column quick actions",
+    "tablet landscape four-column quick actions",
+    "long Persian and German text wrapping",
+    "compact Windows content-width protection"
+  ],
+  "preserved": {
+    "dual_reference_learning_os": true,
+    "adaptive_shell": true,
+    "legal_subject_data": true,
+    "deep_lessons": 30,
+    "official_norm_records": 24,
+    "case_briefs_and_teaching_cases": 13,
+    "user_state": true,
+    "offline_support": true
+  },
+  "release_gates": {
+    "source_gate": "scripts/qa-v931.mjs",
+    "browser_gate": "tests/visual-acceptance.spec.mjs",
+    "automated_profile_count": 13,
+    "physical_iphone_ipad_windows_acceptance_still_required": true,
+    "public_runtime_scheduled_smoke": true,
+    "state_reset": false
+  }
+}
