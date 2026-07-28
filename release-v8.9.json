@@ -1,0 +1,53 @@
+{
+  "version": "8.9.0",
+  "release": "Pflege Architecture Rebuild",
+  "design_reference": {
+    "source": "Elijoon93/pflege-deutsch-pro",
+    "copied_domain_data": false,
+    "borrowed_patterns": [
+      "260px fixed desktop sidebar",
+      "five-item mobile bottom navigation",
+      "compact dashboard metrics",
+      "quick actions",
+      "learning hubs",
+      "lesson list with progressive detail",
+      "short kicker-title-description writing pattern",
+      "single visual language for cards, forms and progress"
+    ]
+  },
+  "information_architecture": {
+    "primary_hubs": ["Dashboard", "Study", "Learning", "Practice", "Research"],
+    "research_hub_added": true,
+    "legacy_modules_preserved": true,
+    "empty_navigation_allowed": false
+  },
+  "responsive_acceptance": {
+    "desktop_sidebar_px": 260,
+    "mobile_tablet_breakpoint_px": 1024,
+    "mobile_primary_tabs": 5,
+    "safe_area_supported": true,
+    "sticky_mobile_header": false,
+    "minimum_input_font_px_ios": 16
+  },
+  "visual_rules": {
+    "palette": ["clinical teal", "navy", "paper white", "slate"],
+    "emoji_navigation": false,
+    "maximum_primary_dashboard_sections": 5,
+    "consistent_card_radius_px": 18,
+    "progressive_disclosure": true
+  },
+  "preserved": {
+    "legal_content": true,
+    "v8_8_lessons": true,
+    "submission_package": true,
+    "citation_tools": true,
+    "user_state": true,
+    "pwa_offline_support": true
+  },
+  "acceptance": {
+    "visible_runtime_badge_required": true,
+    "public_runtime_verification_required": true,
+    "state_reset": false,
+    "quality_gate_required": true
+  }
+}
