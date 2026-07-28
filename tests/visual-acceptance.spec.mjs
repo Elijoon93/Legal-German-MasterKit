@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {test,expect,chromium,webkit} from '@playwright/test';
 
-const VERSION='9.3.3';
+const VERSION='9.3.4';
 const ARTIFACT_ROOT=path.resolve('artifacts');
 const SCREENSHOT_ROOT=path.join(ARTIFACT_ROOT,'screenshots');
 const METRIC_ROOT=path.join(ARTIFACT_ROOT,'metrics');
@@ -35,7 +35,7 @@ async function inspect(page,profile){
     const visible=element=>Boolean(element&&getComputedStyle(element).display!=='none'&&getComputedStyle(element).visibility!=='hidden'&&element.getBoundingClientRect().width>0&&element.getBoundingClientRect().height>0);
     const rect=selector=>{const el=document.querySelector(selector);if(!el)return null;const r=el.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}};
     const sidebar=document.querySelector('.v90-sidebar'),mobile=document.querySelector('.v90-mobile-nav');
-    const content=document.querySelector('.v90-content'),shell=document.querySelector('.app-shell');
+    const content=document.querySelector('.v90-content');
     const mobileMode=['phone','tablet'].includes(root.dataset.deviceMode);
     const bodyStyle=getComputedStyle(body);
     const focusButtons=[...document.querySelectorAll('#v93StartFocus')].filter(visible);
@@ -53,6 +53,7 @@ async function inspect(page,profile){
       startupVisible:visible(document.querySelector('#startupStatus')),
       startupErrors:window.LGMK_STARTUP_DIAGNOSTICS?.errors||[],
       stability:window.LGMK_RUNTIME_STABILITY||null,
+      automationAvailable:Boolean(window.LGMK_V934?.runAutomated&&window.LGMK_V934?.report),
       title:document.title,
       viewport:{width:innerWidth,height:innerHeight},
       rootScrollWidth:root.scrollWidth,
@@ -70,8 +71,6 @@ async function inspect(page,profile){
       advancedGroupVisible:advancedGroups.length>0,
       sidebarRect:rect('.v90-sidebar'),
       contentRect:rect('.v90-content'),
-      shellRect:rect('.app-shell'),
-      topbarRect:rect('.topbar'),
       expectedMode,
       expectedRelease:version,
       expectedMobile:mobileMode,
@@ -81,7 +80,7 @@ async function inspect(page,profile){
 }
 
 for(const profile of PROFILES){
-  test(`${profile.label} — stable startup, shell, learning flow and truthful acceptance`,async({baseURL})=>{
+  test(`${profile.label} — stable v9.3.4 shell, learning flow and acceptance evidence`,async({baseURL})=>{
     const browserType=profile.engine==='webkit'?webkit:chromium;
     const browser=await browserType.launch({headless:true});
     const context=await browser.newContext({
@@ -101,10 +100,11 @@ for(const profile of PROFILES){
       if(message.type()==='error'&&!/Failed to load resource|favicon/i.test(message.text()))consoleErrors.push(message.text());
     });
     const root=String(baseURL||'').replace(/\/$/,'');
-    await page.goto(`${root}/?v=933&visual=${profile.id}`,{waitUntil:'domcontentloaded'});
+    await page.goto(`${root}/?v=934&visual=${profile.id}`,{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.documentElement.dataset.appReady==='true',{timeout:15_000});
     await page.waitForFunction(()=>document.documentElement.dataset.runtimeStable==='true',{timeout:15_000});
     await page.waitForFunction(()=>document.documentElement.dataset.learningOs==='dual-reference-v93');
+    await page.waitForFunction(()=>Boolean(window.LGMK_V934?.report));
     await expect(page.locator('.v93-home')).toBeVisible();
     await expect(page.locator('#startupStatus')).toHaveCount(0);
     await expect(page.locator('#v90ReleaseBadge')).toContainText(VERSION);
@@ -121,6 +121,7 @@ for(const profile of PROFILES){
     expect(metrics.release).toBe(VERSION);
     expect(metrics.learningOs).toBe('dual-reference-v93');
     expect(metrics.shellMarker).toBe('adaptive-v92');
+    expect(metrics.automationAvailable).toBeTruthy();
     expect(metrics.title).toContain(`v${VERSION}`);
     expect(metrics.mainNavCount).toBe(1);
     expect(metrics.sidebarCount).toBe(1);
@@ -162,10 +163,18 @@ for(const profile of PROFILES){
     await page.evaluate(()=>window.go('deviceAcceptance'));
     await expect(page.locator('#deviceAcceptance .v90-check-grid')).toBeVisible();
     await expect(page.locator('#deviceAcceptance .v90-check-grid article.fail')).toHaveCount(0);
+    await expect(page.locator('#deviceAcceptance .v934-acceptance')).toBeVisible();
+    await expect(page.locator('#v934AutoRun')).toBeVisible();
+    await expect(page.locator('#v934Export')).toBeVisible();
     const widthMetric=page.locator('#deviceAcceptance .v91-hub-summary .v91-metric').filter({hasText:'عرض محتوا'});
     const runtimeMetric=page.locator('#deviceAcceptance .v91-hub-summary .v91-metric').filter({hasText:'Runtime'});
     await expect(widthMetric).toContainText('PASS');
     await expect(runtimeMetric).toContainText('PASS');
+    const evidence=await page.evaluate(()=>window.LGMK_V934.report());
+    expect(evidence.schema).toBe('lgmk-device-acceptance-report/v1');
+    expect(evidence.version).toBe(VERSION);
+    expect(evidence.runtime.appReady).toBeTruthy();
+    expect(evidence.runtime.runtimeStable).toBeTruthy();
     await page.screenshot({path:path.join(SCREENSHOT_ROOT,`${profile.id}-device-acceptance.png`),fullPage:true});
 
     expect(pageErrors).toEqual([]);
