@@ -65,12 +65,13 @@ release.version==='9.3.2'?pass('release version',release.version):fail('release 
 release.startup_architecture?.external_scripts==='deferred in document head'?pass('deferred startup architecture'):fail('deferred startup architecture');
 release.startup_architecture?.boot_is_idempotent===true&&release.startup_architecture?.wire_is_idempotent===true?pass('idempotent startup'):fail('idempotent startup');
 release.startup_architecture?.automatic_recovery_attempts===2?pass('recovery attempts','2'):fail('recovery attempts');
+release.startup_architecture?.final_failure_timeout_ms===12000?pass('slow-network timeout','12000ms'):fail('slow-network timeout',String(release.startup_architecture?.final_failure_timeout_ms));
 release.performance?.parser_blocking_external_scripts===0?pass('release parser-blocking gate','0'):fail('release parser-blocking gate');
 release.release_gates?.blank_page_forbidden===true&&release.release_gates?.static_header_only_forbidden===true?pass('blank-page gate'):fail('blank-page gate');
 release.release_gates?.state_reset===false?pass('state preservation'):fail('state preservation');
 
 const startup=fs.readFileSync('assets/js/v932-startup.js','utf8');
-for(const token of ['const VERSION="9.3.2"','unhandledrejection','LGMK_STARTUP_DIAGNOSTICS','attemptRecovery','shellReady','lgmk:ready','setTimeout(finalCheck,7000)'])startup.includes(token)?pass('startup token',token):fail('startup token',token);
+for(const token of ['const VERSION="9.3.2"','unhandledrejection','LGMK_STARTUP_DIAGNOSTICS','attemptRecovery','shellReady','lgmk:ready','setTimeout(finalCheck,12000)','errors[errors.length-1]'])startup.includes(token)?pass('startup token',token):fail('startup token',token);
 !startup.includes('localStorage.clear(')&&!startup.includes('indexedDB.deleteDatabase(')&&!startup.includes('caches.delete(')?pass('startup state preservation'):fail('startup destructive call');
 
 const coreBoot=fs.readFileSync('assets/js/app-views2.js','utf8');
