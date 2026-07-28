@@ -1,0 +1,54 @@
+{
+  "version": "9.3.2",
+  "release": "Startup Consolidation and Boot Recovery",
+  "trigger": {
+    "evidence": "Physical Android screenshot showed static HTML header with no shell, navigation or dashboard content.",
+    "classification": "startup pipeline failure or prolonged parser-blocking script chain",
+    "not_classified_as": ["responsive CSS defect", "legal data defect", "device width defect"]
+  },
+  "startup_architecture": {
+    "external_scripts": "deferred in document head",
+    "download_strategy": "parallel fetch with ordered execution",
+    "boot_registration": "DOMContentLoaded when interactive, immediate only after complete",
+    "boot_is_idempotent": true,
+    "wire_is_idempotent": true,
+    "install_handler_is_idempotent": true,
+    "visible_loading_skeleton": true,
+    "global_error_capture": true,
+    "unhandled_rejection_capture": true,
+    "automatic_recovery_attempts": 2,
+    "final_failure_timeout_ms": 7000,
+    "visible_failure_details": true
+  },
+  "recovery": {
+    "primary": "normal boot event",
+    "secondary": "call exported boot function",
+    "tertiary": "build navigation and open dashboard when core functions exist",
+    "clean_reload_url": "?v=932&t=<timestamp>",
+    "diagnostic_object": "window.LGMK_STARTUP_DIAGNOSTICS"
+  },
+  "performance": {
+    "parser_blocking_external_scripts": 0,
+    "script_execution_order_preserved": true,
+    "critical_startup_script": "assets/js/v932-startup.js",
+    "critical_startup_style": "assets/css/v932-startup.css"
+  },
+  "preserved": {
+    "dual_reference_learning_os": true,
+    "adaptive_shell": true,
+    "visual_acceptance_hardening": true,
+    "legal_subject_data": true,
+    "user_state": true,
+    "offline_support": true
+  },
+  "release_gates": {
+    "visible_runtime_badge": "v9.3.2",
+    "blank_page_forbidden": true,
+    "static_header_only_forbidden": true,
+    "startup_skeleton_required": true,
+    "boot_error_must_be_visible": true,
+    "state_reset": false,
+    "physical_android_recheck_required": true,
+    "physical_iphone_ipad_windows_acceptance_required": true
+  }
+}
