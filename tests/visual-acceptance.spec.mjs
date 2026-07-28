@@ -81,7 +81,7 @@ async function inspect(page,profile){
 }
 
 for(const profile of PROFILES){
-  test(`${profile.label} — stable startup, shell, learning flow and screenshots`,async({baseURL})=>{
+  test(`${profile.label} — stable startup, shell, learning flow and truthful acceptance`,async({baseURL})=>{
     const browserType=profile.engine==='webkit'?webkit:chromium;
     const browser=await browserType.launch({headless:true});
     const context=await browser.newContext({
@@ -158,6 +158,16 @@ for(const profile of PROFILES){
     await page.evaluate(()=>window.go('skillsHub'));
     await expect(page.locator('.v93-competency')).toHaveCount(8);
     await page.screenshot({path:path.join(SCREENSHOT_ROOT,`${profile.id}-competencies.png`),fullPage:true});
+
+    await page.evaluate(()=>window.go('deviceAcceptance'));
+    await expect(page.locator('#deviceAcceptance .v90-check-grid')).toBeVisible();
+    await expect(page.locator('#deviceAcceptance .v90-check-grid article.fail')).toHaveCount(0);
+    const widthMetric=page.locator('#deviceAcceptance .v91-hub-summary .v91-metric').filter({hasText:'عرض محتوا'});
+    const runtimeMetric=page.locator('#deviceAcceptance .v91-hub-summary .v91-metric').filter({hasText:'Runtime'});
+    await expect(widthMetric).toContainText('PASS');
+    await expect(runtimeMetric).toContainText('PASS');
+    await page.screenshot({path:path.join(SCREENSHOT_ROOT,`${profile.id}-device-acceptance.png`),fullPage:true});
+
     expect(pageErrors).toEqual([]);
     expect(consoleErrors).toEqual([]);
     await context.close();
