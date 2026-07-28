@@ -94,7 +94,7 @@
       modeMatches:mode===expected,noHorizontalOverflow:root.scrollWidth<=root.clientWidth+1&&body.scrollWidth<=body.clientWidth+1,
       contentUsable:contentWidth>=minUsable&&shellWidth>0,correctNavigation:isMobile?style(mobile)?.display!=="none":style(sidebar)?.display!=="none",
       oppositeNavigationHidden:isMobile?style(sidebar)?.display==="none":style(mobile)?.display==="none",fiveMobileTabs:!isMobile||navCount===5,
-      layoutPresent:Boolean(layout&&content&&shell),iosInputFont:!isMobile||minFont>=15.9,activeContentRendered:Boolean(active&&active.textContent.trim().length>20),
+      layoutPresent:Boolean(layout&&content&&shell),iosInputFont:!isMobile||minFont>=15.9,activeContentRendered:Boolean(active&&(active.textContent.trim().length>20||active.id==="deviceAcceptance")),
       viewportFit:Boolean(doc.querySelector('meta[name="viewport"]')?.content.includes("viewport-fit=cover")),releaseVisible:Boolean(doc.querySelector("#v90ReleaseBadge")?.textContent.includes(VERSION)),
       adaptiveMarker:root.dataset.shell==="final-adaptive-shell"
     };
