@@ -4,7 +4,8 @@
   const CACHE=window.LGMK_CACHE_NAME||"lgmk-v9-3-dual-reference-learning-os-20260728a";
   function assets(){
     const discovered=[...document.querySelectorAll('link[rel="stylesheet"][href],script[src],link[rel="icon"][href],link[rel="manifest"][href]')].map(node=>node.getAttribute("href")||node.getAttribute("src")).filter(Boolean);
-    return [...new Set(['./','./index.html',`./release-v${VERSION.slice(0,3)}.json`,...discovered])];
+    const releaseFiles=[`./release-v${VERSION}.json`,`./release-v${VERSION.split('.').slice(0,2).join('.')}.json`];
+    return [...new Set(['./','./index.html',...releaseFiles,...discovered])];
   }
   async function repair(){
     if(!("caches" in window))return{supported:false,total:0,cached:0};
