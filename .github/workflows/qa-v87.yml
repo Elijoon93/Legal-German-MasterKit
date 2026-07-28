@@ -12,7 +12,7 @@ permissions:
 jobs:
   quality-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 7
+    timeout-minutes: 9
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,3 +26,5 @@ jobs:
         run: node scripts/qa-v88.mjs
       - name: Run v8.9 architecture quality gates
         run: node scripts/qa-v89.mjs
+      - name: Run v9.0 consolidation and device gates
+        run: node scripts/qa-v90.mjs
