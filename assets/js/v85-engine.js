@@ -12,6 +12,18 @@
     "competition":"Wettbewerbs-, Arbeits- und Immaterialgüterrecht",
     "research":"Juristische Methodik und Forschung"
   };
+  const COURSE_KEYS={
+    "bgb-at":["BGB AT","Vertragsrecht","Willenserklärung","Anfechtung","Stellvertretung"],
+    "schuld-at":["Schuldrecht","Verzug","Unmöglichkeit","Schadensersatz"],
+    "schuld-bt":["Kaufrecht","Verbraucherrecht","Sachmangel","Nacherfüllung","Kaufvertrag","Deliktsrecht"],
+    "commercial":["Handelsrecht","Kaufmann","Prokura","HGB"],
+    "company":["Gesellschaftsrecht","Gesellschaft","GmbH","AG","OHG","KG"],
+    "admin":["Verwaltungsrecht","Verwaltungsakt","VwVfG","Anhörung","Widerspruch"],
+    "economic-admin":["Wirtschaftsverwaltungs","Vergaberecht","Gewerbe","Genehmigung","Regulierung"],
+    "eu":["Europarecht","Grundfreiheit","Warenverkehr","Niederlassung","Dienstleistung","AEUV"],
+    "competition":["Kartell","Wettbewerb","Beihilfe","Arbeitsrecht","Urheber","Immaterial"],
+    "research":["Forschung","Methodik","Gutachtenstil","Seminar","Magister","Zitier"]
+  };
   Object.assign(state,{
     courseWorkspace:state.courseWorkspace||{selected:DATA.courses?.[0]?.id||"bgb-at",sessions:{},notes:{}},
     semesterEvents:Array.isArray(state.semesterEvents)?state.semesterEvents:[],
@@ -31,15 +43,16 @@
   }
   function courseById(id){return DATA.courses.find(c=>c.id===id)||DATA.courses[0]}
   function courseSubject(courseOrId){const c=typeof courseOrId==="string"?courseById(courseOrId):courseOrId;return COURSE_MAP[c?.id]||c?.title||Object.keys(DATA.exams)[0]}
-  function relevantBySubject(list,subject,field="area"){
-    const exact=list.filter(x=>typeof v83SubjectFor==="function"&&v83SubjectFor(x[field])===subject);
-    return exact.length?exact:list.filter(x=>norm(JSON.stringify(x)).includes(norm(subject.split(" ")[0])));
+  function matchesCourse(value,course,subject){
+    const text=norm(typeof value==="string"?value:JSON.stringify(value)),keys=COURSE_KEYS[course.id]||[subject,course.area,course.title];
+    return (typeof v83SubjectFor==="function"&&v83SubjectFor(value?.area||value)===subject)||keys.some(k=>text.includes(norm(k)));
   }
+  function relevantByCourse(list,course,subject){return list.filter(x=>matchesCourse(x,course,subject))}
   function courseAssets(id){
     const course=courseById(id),subject=courseSubject(course);
-    const vocab=DATA.vocab.map((x,index)=>({...x,index})).filter(x=>typeof v83SubjectFor==="function"&&v83SubjectFor(x.area)===subject);
-    const readings=relevantBySubject(DATA.readings,subject);
-    const cases=relevantBySubject(DATA.cases,subject);
+    const vocab=DATA.vocab.map((x,index)=>({...x,index})).filter(x=>matchesCourse(x,course,subject));
+    const readings=relevantByCourse(DATA.readings,course,subject);
+    const cases=relevantByCourse(DATA.cases,course,subject);
     const books=DATA.books.filter(b=>norm(`${b.cat} ${b.title} ${b.use}`).includes(norm(course.area))||course.books.some(x=>norm(x).includes(norm(b.title))||norm(b.title).includes(norm(x.split(",")[0]))));
     return{course,subject,vocab:vocab.slice(0,30),readings,cases,books,exam:DATA.exams[subject]||[]};
   }
@@ -109,14 +122,17 @@
 
   function searchAll(query){
     const q=norm(query);if(q.length<2)return[];const out=[],push=(type,title,sub,view,action)=>{if(norm(`${title} ${sub}`).includes(q))out.push({type,title,sub,view,action})};
-    DATA.courses.forEach(c=>push("درس",c.title,`${c.area} · ${c.outcome}`,"courseWorkspace",{kind:"course",id:c.id}));
+    DATA.courses.forEach(c=>push("درس",c.title,`${c.area} · ${c.outcome} · ${c.units.join(" · ")} · ${c.statutes.join(" · ")}`,"courseWorkspace",{kind:"course",id:c.id}));
     DATA.vocab.forEach((v,i)=>push("اصطلاح",v.term,`${v.fa} · ${v.example}`,"language",{kind:"vocab",id:i}));
     DATA.sentences.forEach((s,i)=>push("قالب جمله",s.de,`${s.fa} · ${s.cat}`,"language",{kind:"sentence",id:i}));
     DATA.readings.forEach(r=>push("متن",r.title,`${r.area} · ${r.level}`,"reading",{kind:"reading",id:r.id}));
     DATA.cases.forEach(c=>push("پرونده",c.title,`${c.area} · ${c.question}`,"caseLab",{kind:"case",id:c.id}));
     DATA.books.forEach(b=>push("کتاب",`${b.author}: ${b.title}`,`${b.cat} · ${b.use}`,"library",{kind:"book",title:b.title}));
     DATA.resources.forEach(r=>push("منبع رسمی",r.title,`${r.kind} · ${r.use}`,"library",{kind:"resource",url:r.url}));
-    return out.slice(0,60);
+    state.semesterEvents.forEach(e=>push("رویداد",e.title,`${e.date} · ${e.type} · ${e.notes}`,"semesterOps",{kind:"event",id:e.id}));
+    state.sourceMatrix.forEach(x=>push("منبع پژوهشی",x.title,`${x.author} · ${x.claim} · ${x.citation}`,"sourceMatrix",{kind:"source",id:x.id}));
+    Object.entries(state.courseWorkspace.notes||{}).forEach(([id,text])=>push("یادداشت درس",courseById(id).title,text,"courseWorkspace",{kind:"note",id}));
+    return out.slice(0,80);
   }
   function openSearchResult(result){
     const a=result.action||{};
@@ -126,6 +142,9 @@
     if(a.kind==="reading")return openAsset("reading",a.id);
     if(a.kind==="case")return openAsset("case",a.id);
     if(a.kind==="resource"&&a.url)return window.open(a.url,"_blank","noopener");
+    if(a.kind==="event")return go("semesterOps");
+    if(a.kind==="source")return go("sourceMatrix");
+    if(a.kind==="note"){selectCourse(a.id);return go("courseWorkspace")}
     return go(result.view||"dashboard");
   }
 
