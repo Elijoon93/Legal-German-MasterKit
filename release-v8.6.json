@@ -21,7 +21,7 @@
     "content_clearance": "App shell and body reserve navigation plus safe-area height",
     "tablet_layout": "Two-column tablet grids and full-width tablet shell",
     "text_rendering": "100% text-size adjustment, plaintext bidi and overflow wrapping",
-    "more_sheet": "Safe-area-aware modal sheet with outside-click dismissal"
+    "more_sheet": "Safe-area-aware modal sheet with outside-click dismissal and corrected stacking"
   },
   "acceptance_targets": [
     "iPhone 375x812",
@@ -32,6 +32,33 @@
     "Tablet portrait 820x1180",
     "Tablet landscape 1024x768"
   ],
+  "representative_render_acceptance": {
+    "engine": "Headless Chromium with representative production shell",
+    "iphone_390x844": {
+      "horizontal_overflow": false,
+      "topbar_position": "relative",
+      "navigation_height_px": 58,
+      "navigation_bottom_gap_px": 0,
+      "content_bottom_padding_px": 76,
+      "desktop_sidebar_hidden": true
+    },
+    "ipad_768x1024": {
+      "horizontal_overflow": false,
+      "topbar_position": "relative",
+      "navigation_height_px": 60,
+      "navigation_bottom_gap_px": 0,
+      "content_bottom_padding_px": 84,
+      "desktop_sidebar_hidden": true
+    },
+    "tablet_landscape_1024x768": {
+      "horizontal_overflow": false,
+      "topbar_position": "relative",
+      "navigation_height_px": 60,
+      "navigation_bottom_gap_px": 0,
+      "content_bottom_padding_px": 84,
+      "desktop_sidebar_hidden": true
+    }
+  },
   "preserved": {
     "domain_content": true,
     "learning_state": true,
@@ -46,6 +73,9 @@
     "dynamic_viewport_handler": "PASS",
     "keyboard_navigation_hide": "PASS",
     "tablet_breakpoint": "PASS",
+    "more_sheet_stacking": "PASS",
+    "representative_responsive_render": "PASS",
     "legacy_state_reset": false
-  }
+  },
+  "device_acceptance_note": "A post-release screenshot from real iPhone Safari is still required to verify browser-specific chrome and cache behavior on the user's device."
 }
