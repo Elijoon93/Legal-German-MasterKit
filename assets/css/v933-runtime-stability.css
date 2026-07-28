@@ -1,0 +1,17 @@
+:root{--v933-rail:88px}
+html[data-device-mode="compact"] #mainNav .v90-sidebar{width:var(--v933-rail)!important;max-width:var(--v933-rail)!important;min-width:var(--v933-rail)!important;overflow-x:hidden!important}
+html[data-device-mode="compact"] #mainNav .v90-brand>span,
+html[data-device-mode="compact"] #mainNav .v90-nav-groups h4,
+html[data-device-mode="compact"] #mainNav .v90-nav-groups button b,
+html[data-device-mode="compact"] #mainNav .v90-sidebar>footer{display:none!important;width:0!important;max-width:0!important;overflow:hidden!important;visibility:hidden!important}
+html[data-device-mode="compact"] #mainNav .v90-nav-groups button{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;padding:8px!important;overflow:hidden!important}
+html[data-device-mode="compact"] #mainNav .v90-nav-groups button span{display:grid!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;flex:0 0 38px!important;margin:0!important}
+html[data-device-mode="compact"] #mainNav .v90-nav-groups section{width:100%!important;min-width:0!important;overflow:hidden!important}
+html[data-device-mode="compact"] .v90-layout{grid-template-columns:var(--v933-rail) minmax(0,1fr)!important}
+html[data-device-mode="compact"] .v90-content{min-width:0!important;width:100%!important;overflow-x:clip!important}
+html[data-device-mode="compact"] .app-shell{max-width:none!important;width:100%!important}
+html[data-app-ready="true"] #startupStatus{display:none!important}
+html[data-app-ready="true"] .v932-startup-bar i{animation:none!important}
+html[data-runtime-stable="true"] *{scroll-behavior:auto}
+@media(max-width:1099px){#mainNav .v90-sidebar{display:none!important}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
