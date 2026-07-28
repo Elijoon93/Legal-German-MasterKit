@@ -1,7 +1,7 @@
 "use strict";
 (function(){
-  const VERSION="9.2.0";
-  const CACHE="lgmk-v9-2-adaptive-shell-20260728a";
+  const VERSION=window.LGMK_RELEASE_VERSION||"9.2.0";
+  const CACHE=window.LGMK_CACHE_NAME||"lgmk-v9-2-adaptive-shell-20260728a";
   let raf=0;
   function classify(){
     const vv=window.visualViewport;
