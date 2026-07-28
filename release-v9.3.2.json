@@ -17,8 +17,10 @@
     "global_error_capture": true,
     "unhandled_rejection_capture": true,
     "automatic_recovery_attempts": 2,
-    "final_failure_timeout_ms": 7000,
-    "visible_failure_details": true
+    "final_failure_timeout_ms": 12000,
+    "slow_network_status_ms": 7500,
+    "visible_failure_details": true,
+    "successful_late_boot_clears_failure_ui": true
   },
   "recovery": {
     "primary": "normal boot event",
