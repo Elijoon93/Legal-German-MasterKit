@@ -1,0 +1,76 @@
+{
+  "version": "9.4.0",
+  "release": "Final Release Candidate",
+  "scope": "Runtime, startup, responsive, navigation, PWA, performance and visual consolidation only.",
+  "consolidation": {
+    "startup_runtime": "assets/js/final-startup.js",
+    "operational_runtime": "assets/js/final-ops.js",
+    "operational_styles": "assets/css/final-ops.css",
+    "removed_from_active_runtime": [
+      "assets/js/v92-adaptive.js",
+      "assets/js/v92-device.js",
+      "assets/js/v93-cache-repair.js",
+      "assets/js/v931-visual-guard.js",
+      "assets/js/v932-startup.js",
+      "assets/js/v933-stability.js",
+      "assets/js/v934-acceptance-automation.js",
+      "assets/js/v934-physical-version.js",
+      "assets/js/v934-sw-register-final2.js",
+      "assets/css/v92-adaptive-shell.css",
+      "assets/css/v931-visual-acceptance.css",
+      "assets/css/v932-startup.css",
+      "assets/css/v933-runtime-stability.css",
+      "assets/css/v934-acceptance.css"
+    ]
+  },
+  "adaptive_modes": {
+    "desktop": "labelled sidebar",
+    "compact": "88px icon rail",
+    "tablet": "five-item bottom navigation",
+    "phone": "single-column layout with safe-area support",
+    "phone_landscape_rule": "coarse pointer and short side below 600px remains phone"
+  },
+  "automated_acceptance": {
+    "profiles": 13,
+    "engines": ["Chromium", "WebKit"],
+    "views": ["Dashboard", "Focus Session", "Competency Path", "Study", "Practice", "Research", "Device Acceptance"],
+    "required_checks": [
+      "appReady",
+      "runtimeStable",
+      "singleMainNav",
+      "singleSidebar",
+      "noHorizontalOverflow",
+      "contentUsable",
+      "correctNavigation",
+      "oppositeNavigationHidden",
+      "releaseVisible",
+      "activeContentRendered"
+    ]
+  },
+  "physical_acceptance": {
+    "required_evidence": [
+      "Windows Compact",
+      "iPhone portrait",
+      "iPhone landscape",
+      "iPad portrait",
+      "iPad landscape"
+    ],
+    "automatic_emulation_is_not_physical_signoff": true
+  },
+  "preservation": {
+    "local_storage": true,
+    "indexed_db": true,
+    "legal_content": true,
+    "learning_progress": true,
+    "research_data": true,
+    "offline_support": true,
+    "state_reset": false
+  },
+  "final_gate": {
+    "automated_matrix_must_pass": "13/13",
+    "public_pages_must_match": "9.4.0",
+    "console_errors": 0,
+    "physical_evidence_must_pass": "5/5",
+    "final_accepted_only_when_all_true": true
+  }
+}
