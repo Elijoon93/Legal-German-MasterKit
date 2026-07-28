@@ -1,0 +1,63 @@
+{
+  "version": "9.0.0",
+  "release": "Consolidation and Device Acceptance",
+  "architecture": {
+    "primary_hubs": ["Dashboard", "Study", "Learning", "Practice", "Research"],
+    "desktop_sidebar_px": 260,
+    "mobile_primary_tabs": 5,
+    "legacy_shell_removed": ["v84-shell.js", "v84-hotfix.js", "v89-architecture.js"],
+    "legacy_visual_patches_removed": ["v84-pflege-inspired.css", "v86-mobile-acceptance.css", "v86-mobile-hotfix.css", "v89-architecture.css"],
+    "feature_styles_preserved": ["style.css", "v82-professional.css", "v83-depth.css", "v85-workspace.css", "v87-evidence.css", "v88-deep.css"],
+    "final_foundation": "assets/css/v90-foundation.css",
+    "final_shell": "assets/js/v90-shell.js"
+  },
+  "device_acceptance": {
+    "profiles": 9,
+    "targets": [
+      "iPhone SE 375x667",
+      "iPhone 14/15 390x844",
+      "iPhone Pro Max 430x932",
+      "Android Phone 360x800",
+      "iPad Mini 768x1024",
+      "iPad Landscape 1024x768",
+      "Android Tablet 800x1280",
+      "Desktop 1366x768",
+      "Wide Desktop 1920x1080"
+    ],
+    "automated_checks": [
+      "horizontal overflow",
+      "shell width",
+      "five-item mobile navigation",
+      "desktop/mobile navigation exclusivity",
+      "header mode",
+      "minimum mobile input font",
+      "non-empty active content",
+      "viewport-fit cover",
+      "visible runtime badge"
+    ],
+    "physical_acceptance_required": ["iPhone", "iPad"],
+    "breakpoint_px": 1024,
+    "safe_area_supported": true,
+    "visual_viewport_keyboard_handling": true
+  },
+  "release_gates": {
+    "visible_runtime_badge": true,
+    "public_runtime_verification": true,
+    "no_empty_routes": true,
+    "state_reset": false,
+    "localStorage_clear_forbidden": true,
+    "indexedDB_delete_forbidden": true,
+    "service_worker_controller_required_for_final": true,
+    "automated_matrix_must_pass": true,
+    "physical_device_signoff_must_pass": true
+  },
+  "preserved": {
+    "legal_content": true,
+    "v8_8_deep_lessons": true,
+    "v8_7_evidence": true,
+    "submission_package": true,
+    "citation_tools": true,
+    "user_state": true,
+    "offline_support": true
+  }
+}
