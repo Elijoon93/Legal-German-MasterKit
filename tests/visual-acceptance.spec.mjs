@@ -98,7 +98,7 @@ for(const profile of PROFILES){
     await page.screenshot({path:path.join(SCREENSHOT_ROOT,`${profile.id}-focus.png`),fullPage:false});await page.locator('#v93CloseFocus').click();await expect(page.locator('#v93FocusOverlay')).toHaveCount(0);
 
     await assertRoute(page,'studyHub');await page.screenshot({path:path.join(SCREENSHOT_ROOT,`${profile.id}-study.png`),fullPage:true});
-    await assertRoute(page,'skillsHub');await expect(page.locator('.v93-competency')).toHaveCount(8);await page.screenshot({path:path.join(SCREENSHOT_ROOT,`${profile.id}-competencies.png`),fullPage:true});
+    await assertRoute(page,'skillsHub');await expect(page.locator('#skillsHub .v93-competency')).toHaveCount(8);await page.screenshot({path:path.join(SCREENSHOT_ROOT,`${profile.id}-competencies.png`),fullPage:true});
     await assertRoute(page,'practiceHub');await assertRoute(page,'researchHub');
     await assertRoute(page,'deviceAcceptance');await expect(page.locator('#deviceAcceptance .v90-check-grid article.fail')).toHaveCount(0);await expect(page.locator('#deviceAcceptance .final-acceptance')).toBeVisible();
     const widthMetric=page.locator('#deviceAcceptance .v91-hub-summary .v91-metric').filter({hasText:'عرض محتوا'});const runtimeMetric=page.locator('#deviceAcceptance .v91-hub-summary .v91-metric').filter({hasText:'Runtime'});
