@@ -19,7 +19,10 @@
   ];
   const metric=(label,value,detail="")=>`<article class="v91-metric"><small>${label}</small><strong>${value}</strong>${detail?`<span>${detail}</span>`:""}</article>`;
   const expectedMode=width=>width<700?"phone":width<1100?"tablet":width<1360?"compact":"desktop";
-  const nextFrame=win=>new Promise(resolve=>(win.requestAnimationFrame||requestAnimationFrame)(()=>resolve()));
+  const nextFrame=win=>new Promise(resolve=>{
+    if(typeof win?.requestAnimationFrame==="function")win.requestAnimationFrame(()=>resolve());
+    else setTimeout(resolve,16);
+  });
 
   function collect(doc,profile){
     const win=doc.defaultView;
