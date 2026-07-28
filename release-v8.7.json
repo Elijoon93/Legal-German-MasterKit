@@ -1,0 +1,47 @@
+{
+  "version": "8.7.0",
+  "release": "Legal Evidence and Academic Submission Control",
+  "locked_baseline": {
+    "visible_runtime_badge_required": true,
+    "mobile_tablet_acceptance_through_px": 1024,
+    "no_empty_navigation": true,
+    "public_runtime_verification_required": true
+  },
+  "modules": {
+    "norm_evidence_bank": {
+      "records": 24,
+      "official_sources": ["Gesetze im Internet", "EUR-Lex"],
+      "fields": ["rule", "Persian explanation", "exam elements", "legal consequence", "official link", "last checked", "evidence note"]
+    },
+    "case_brief_lab": {
+      "official_eu_judgments": 4,
+      "course_teaching_cases": 9,
+      "required_sections": 6,
+      "minimum_completion_gate": true
+    },
+    "course_workspace": {
+      "courses": 10,
+      "stages_per_course": 8,
+      "new_stages": ["Norm Evidence", "Case Brief"]
+    },
+    "reference_import": {
+      "formats": ["BibTeX", "RIS"],
+      "deduplication": "author + title + year",
+      "auto_verification": false
+    },
+    "citation_audit": {
+      "checks": ["incomplete sources", "unverified sources", "duplicates", "legal citations", "missing numbered entries", "unused bibliography entries", "heuristic uncited sources"]
+    }
+  },
+  "authoritative_verification": {
+    "checked_at": "2026-07-28",
+    "official_examples": ["§ 433 BGB", "§ 35 VwVfG", "Art. 34 AEUV", "EuGH 8/74 Dassonville", "EuGH C-267/91 and C-268/91 Keck", "EuGH C-110/05 Commission v Italy"]
+  },
+  "acceptance": {
+    "javascript_syntax": "PASS",
+    "state_reset": false,
+    "responsive_css": "mobile-first",
+    "official_links_present": true,
+    "course_progress_extended": true
+  }
+}
