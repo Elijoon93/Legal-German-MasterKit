@@ -63,6 +63,12 @@
     "release_and_cache_inherited_from_runtime": true,
     "device_profiles": 13
   },
+  "offline_repair": {
+    "enabled": true,
+    "runtime": "assets/js/v93-cache-repair.js",
+    "strategy": "Discover active stylesheets and scripts from the live document and restore missing entries in the current release cache.",
+    "deletes_user_data": false
+  },
   "preserved": {
     "legal_subject_data": true,
     "deep_lessons": 30,
