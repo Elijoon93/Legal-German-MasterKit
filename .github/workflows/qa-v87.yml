@@ -20,11 +20,5 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run v8.7 quality gates
-        run: node scripts/qa-v87.mjs
-      - name: Run v8.8 quality gates
-        run: node scripts/qa-v88.mjs
-      - name: Run v8.9 architecture quality gates
-        run: node scripts/qa-v89.mjs
-      - name: Run v9.0 consolidation and device gates
+      - name: Run cumulative v9.0 content, consolidation and device gates
         run: node scripts/qa-v90.mjs
