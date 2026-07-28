@@ -39,7 +39,7 @@ function wire(){
   if(b.dataset.readingDone){state.readingDone[b.dataset.readingDone]=!state.readingDone[b.dataset.readingDone];state.minutes+=10;save();render("reading")}
   if(b.hasAttribute("data-save-research-project")){state.researchProject={topic:document.querySelector("#rpTopic").value,question:document.querySelector("#rpQuestion").value,deadline:document.querySelector("#rpDeadline").value,notes:document.querySelector("#rpNotes").value};save();alert("پرونده پژوهش ذخیره شد.")}
   if(b.hasAttribute("data-evaluate-case")){const c=DATA.cases[state.caseIndex],text=document.querySelector("#caseAnswer").value;state.caseAnswers[c.id]=text;state.minutes+=10;save();const r=evaluateCase(text,c);document.querySelector("#caseFeedback").innerHTML=r.map(x=>`<div class="feedback ${x.ok?"good":"warn"}">${x.ok?"✓":"○"} ${x.l}</div>`).join("")}
-  if(b.hasAttribute("data-backup")){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Legal-German-MasterKit-v9.3.3-backup.json";a.click();URL.revokeObjectURL(a.href)}
+  if(b.hasAttribute("data-backup")){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Legal-German-MasterKit-v9.4.0-backup.json";a.click();URL.revokeObjectURL(a.href)}
  });
  document.body.addEventListener("change",e=>{
   if(e.target.matches("[data-plan-task]")){for(const w of state.plan){const t=w.tasks.find(x=>x.id===e.target.dataset.planTask);if(t){t.done=e.target.checked;if(t.done)state.minutes+=Math.round(t.hours*60);break}}save()}
@@ -50,7 +50,7 @@ function wire(){
  });
  document.body.addEventListener("input",e=>{if(e.target.id==="subjectSearch")render("subjects");if(e.target.id==="bookSearch")render("library");if(e.target.id==="languageSearch")updateLanguageFilters()});
  document.body.addEventListener("submit",e=>{if(e.target.id!=="quizForm")return;e.preventDefault();let score=0;DATA.quiz.forEach((q,i)=>{const v=e.target.elements[`q${i}`]?.value;const ok=Number(v)===q.answer;if(ok)score++;document.querySelector(`#ex${i}`).innerHTML=`<div class="feedback ${ok?"good":"warn"}">${ok?"✓ درست":"○ نیاز به مرور"} — ${q.explanation}</div>`});state.examScores.push({score:`${score}/${DATA.quiz.length}`,date:new Date().toISOString()});state.minutes+=20;save();document.querySelector("#quizResult").innerHTML=`<div class="feedback ${score>=16?"good":"warn"}"><b>امتیاز: ${score} از ${DATA.quiz.length}</b></div>`});
- const retry=document.querySelector("#retryBtn");if(retry)retry.onclick=()=>location.replace(`${location.pathname}?v=933&t=${Date.now()}`)
+ const retry=document.querySelector("#retryBtn");if(retry)retry.onclick=()=>location.replace(`${location.pathname}?v=940&t=${Date.now()}`)
 }
 function setupInstall(){
  if(window.__LGMK_INSTALL_WIRED)return;window.__LGMK_INSTALL_WIRED=true;
@@ -63,9 +63,8 @@ function boot(){
  window.__LGMK_BOOT_STATE="running";
  try{
   buildNav();wire();setupInstall();if(!state.plan.length)generatePlan();go(state.view);
-  if("serviceWorker" in navigator)navigator.serviceWorker.register("service-worker.js?v=933").catch(()=>{});
   window.__LGMK_BOOT_STATE="ready";
-  window.dispatchEvent(new CustomEvent("lgmk:ready",{detail:{version:window.LGMK_RELEASE_VERSION||"9.3.3"}}));
+  window.dispatchEvent(new CustomEvent("lgmk:ready",{detail:{version:window.LGMK_RELEASE_VERSION||"9.4.0"}}));
  }catch(err){
   window.__LGMK_BOOT_STATE="failed";console.error(err);
   const text=document.querySelector("#bootErrorText"),panel=document.querySelector("#bootError");
