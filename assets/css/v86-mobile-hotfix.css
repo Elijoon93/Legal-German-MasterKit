@@ -1,0 +1,6 @@
+@media (max-width:1024px){
+  body.v84-lock .main-nav{z-index:120!important}
+  body.v84-lock:after{z-index:110!important}
+  body.v84-lock .v84-mobile-nav{pointer-events:none!important}
+  body.v84-lock .v84-more{pointer-events:auto!important}
+}
