@@ -50,7 +50,7 @@ release.release_gates?.single_shell_only===true?pass('single shell gate'):fail('
 release.release_gates?.state_reset===false?pass('state preservation'):fail('state preservation');
 
 const adaptive=fs.readFileSync('assets/js/v92-adaptive.js','utf8');
-for(const token of ['const VERSION="9.2.0"','visualViewport','data-device-mode','deviceMode=mode','mode="phone"','mode="tablet"','mode="compact"','mode="desktop"','v92ModeBadge','adaptive-v92'])adaptive.includes(token)?pass('adaptive token',token):fail('adaptive token',token);
+for(const token of ['const VERSION="9.2.0"','visualViewport','dataset.deviceMode','deviceMode=mode','mode="phone"','mode="tablet"','mode="compact"','mode="desktop"','v92ModeBadge','adaptive-v92'])adaptive.includes(token)?pass('adaptive token',token):fail('adaptive token',token);
 !adaptive.includes('navigator.userAgent')?pass('no user-agent layout branching'):fail('user-agent layout branching found');
 !adaptive.includes('localStorage.clear(')&&!adaptive.includes('indexedDB.deleteDatabase(')?pass('adaptive state preservation'):fail('adaptive destructive call');
 
@@ -59,6 +59,7 @@ for(const token of ['const VERSION="9.2.0"','singleMainNav','singleSidebar','leg
 const profileBlock=device.match(/const PROFILES=\[(.*?)\];/s)?.[1]||'';
 (profileBlock.match(/\{id:/g)||[]).length===13?pass('device profile definitions','13'):fail('device profile definitions',String((profileBlock.match(/\{id:/g)||[]).length));
 !device.includes('9.1.0')&&!device.includes('9.0.0')?pass('no stale release badge'):fail('stale release badge found');
+!device.includes('localStorage.clear(')&&!device.includes('indexedDB.deleteDatabase(')?pass('device state preservation'):fail('device destructive call');
 
 const css=fs.readFileSync('assets/css/v92-adaptive-shell.css','utf8');
 for(const token of ['html,body{width:100%','padding:0!important','main-nav::before{content:none!important','data-device-mode="desktop"','data-device-mode="compact"','data-device-mode="tablet"','data-device-mode="phone"','grid-template-columns:var(--v92-rail)','repeat(5,minmax(0,1fr))','font-size:16px!important'])css.includes(token)?pass('shell isolation token',token):fail('shell isolation token',token);
