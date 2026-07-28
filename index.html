@@ -4,41 +4,30 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0d3b4a">
-  <meta name="description" content="Legal German MasterKit v7.5.1 stable runtime">
+  <meta name="description" content="Legal German MasterKit v7.6 task-oriented legal learning">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg">
-  <link rel="stylesheet" href="assets/css/style.css?v=751">
-  <title>Legal German MasterKit v7.5.1</title>
+  <link rel="stylesheet" href="assets/css/style.css?v=760">
+  <title>Legal German MasterKit v7.6</title>
 </head>
 <body>
   <header class="topbar">
-    <div>
-      <h1>Legal German MasterKit v7.5.1</h1>
-      <p>Stable Runtime · LL.M. oec. Jena</p>
-    </div>
+    <div><h1>Legal German MasterKit v7.6</h1><p>Task-Oriented Legal Learning · LL.M. oec. Jena</p></div>
     <button id="installBtn" type="button" hidden>نصب</button>
   </header>
-
-  <div id="bootError" class="boot-error" hidden>
-    <strong>خطا در اجرای برنامه</strong>
-    <span id="bootErrorText"></span>
-    <button id="retryBtn" type="button">تلاش دوباره</button>
-  </div>
-
+  <div id="bootError" class="boot-error" hidden><strong>خطا در اجرای برنامه</strong><span id="bootErrorText"></span><button id="retryBtn" type="button">تلاش دوباره</button></div>
   <nav id="mainNav" class="main-nav" aria-label="منوی اصلی"></nav>
-
   <main class="app-shell">
-    <section id="home" class="view active"></section>
-    <section id="path" class="view"></section>
-    <section id="lesson" class="view"></section>
-    <section id="review" class="view"></section>
+    <section id="today" class="view active"></section>
+    <section id="courses" class="view"></section>
+    <section id="vocab" class="view"></section>
     <section id="skills" class="view"></section>
-    <section id="case" class="view"></section>
-    <section id="writing" class="view"></section>
-    <section id="stats" class="view"></section>
+    <section id="caseLab" class="view"></section>
+    <section id="writingLab" class="view"></section>
+    <section id="exam" class="view"></section>
+    <section id="progressView" class="view"></section>
   </main>
-
   <noscript><div class="noscript">برای اجرای برنامه باید JavaScript مرورگر فعال باشد.</div></noscript>
-  <script src="assets/js/app.js?v=751" defer></script>
+  <script src="assets/js/app.js?v=760" defer></script>
 </body>
 </html>
