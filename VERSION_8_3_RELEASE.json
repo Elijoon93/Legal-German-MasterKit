@@ -1,0 +1,23 @@
+{
+  "version": "8.3.0",
+  "release": "Adaptive Learning and Analytics",
+  "engines": {
+    "spaced_repetition": "SM-2-inspired adaptive intervals for 200 legal terms",
+    "adaptive_weakness_model": "weighted analysis of exams, reading, listening, cases and vocabulary",
+    "daily_execution_plan": "six task daily plan generated from current weaknesses",
+    "writing_version_history": "up to 20 snapshots per writing mode with score and word deltas",
+    "exam_error_analytics": "attempt history and recurring-error aggregation per course",
+    "reporting": "print-ready report, CSV analytics, full JSON backup and restore"
+  },
+  "compatibility": {
+    "preserves_v8_1_v8_2_state": true,
+    "storage": "localStorage with portable JSON backup",
+    "offline_cache": "v8.3 asset manifest"
+  },
+  "static_acceptance": {
+    "javascript_syntax": "PASS",
+    "manifest_json": "PASS",
+    "service_worker_assets": "PASS",
+    "navigation_sections": "PASS"
+  }
+}
