@@ -1,0 +1,85 @@
+{
+  "version": "9.3.0",
+  "release": "Dual-Reference Learning OS",
+  "design_references": {
+    "DeutschWeg_FA": {
+      "adopted_methods": [
+        "single dominant continue action",
+        "explainable adaptive coach",
+        "competency path",
+        "diagnostic self-assessment",
+        "five-stage focus session",
+        "evidence-based progression"
+      ],
+      "subject_content_imported": false
+    },
+    "PflegeDeutsch_Pro": {
+      "adopted_methods": [
+        "learner mode by default",
+        "low-density dashboard",
+        "equal quick actions",
+        "lesson list hierarchy",
+        "progressive disclosure of advanced tools",
+        "mobile-first learner navigation"
+      ],
+      "subject_content_imported": false
+    }
+  },
+  "learner_architecture": {
+    "primary_navigation": ["Home", "Study", "Learning", "Practice", "Research"],
+    "dominant_cta_count": 1,
+    "advanced_tools_hidden_from_primary_sidebar": true,
+    "advanced_tools_drawer": ["Global Search", "Reports", "Progress", "Device Acceptance", "Curriculum", "Library"],
+    "focus_session_stages": ["Context", "Rule", "Analysis", "Output", "Review"]
+  },
+  "competency_engine": {
+    "competencies": 8,
+    "nodes": [
+      "Legal Method",
+      "Legal Vocabulary",
+      "Legal Reading",
+      "Academic Listening",
+      "Case Analysis",
+      "Exam Application",
+      "Academic Writing",
+      "Research Evidence"
+    ],
+    "evidence_weight_percent": 85,
+    "optional_self_assessment_weight_percent": 15,
+    "official_certificate": false,
+    "explainable_recommendation": true
+  },
+  "focus_session": {
+    "minimum_analysis_characters": 40,
+    "minimum_output_characters": 80,
+    "review_checks": 3,
+    "completion_creates_evidence": true,
+    "completion_updates_daily_plan": true,
+    "maximum_saved_evidence_records": 100
+  },
+  "adaptive_shell": {
+    "preserved_from_v9_2": true,
+    "modes": ["desktop", "compact", "tablet", "phone"],
+    "release_and_cache_inherited_from_runtime": true,
+    "device_profiles": 13
+  },
+  "preserved": {
+    "legal_subject_data": true,
+    "deep_lessons": 30,
+    "official_norm_records": 24,
+    "case_briefs_and_teaching_cases": 13,
+    "user_state": true,
+    "offline_support": true
+  },
+  "release_gates": {
+    "visible_runtime_badge": "v9.3.0",
+    "no_general_german_content_import": true,
+    "no_nursing_content_import": true,
+    "single_shell_only": true,
+    "one_dominant_dashboard_cta": true,
+    "advanced_tools_outside_primary_navigation": true,
+    "state_reset": false,
+    "public_runtime_verification": true,
+    "physical_windows_iphone_ipad_acceptance_required": true
+  }
+}
