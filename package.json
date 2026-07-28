@@ -1,0 +1,14 @@
+{
+  "name": "legal-german-masterkit",
+  "version": "9.3.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "qa:source": "node scripts/qa-v931.mjs",
+    "qa:visual": "playwright test",
+    "qa": "npm run qa:source && npm run qa:visual"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  }
+}
