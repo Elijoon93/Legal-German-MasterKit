@@ -1,0 +1,23 @@
+{
+  "version": "8.5.0",
+  "release": "Course Workspace and Semester Operations",
+  "operational_modules": {
+    "course_workspace": "Integrated syllabus, legal language, reading, case, writing and exam workflow for 10 courses",
+    "semester_operations": "User-managed deadlines, completion states and ICS calendar export",
+    "research_source_matrix": "Claim-to-source mapping, completeness audit, CSV and BibTeX export",
+    "global_search": "Unified search across courses, terms, sentence patterns, readings, cases, books and official resources"
+  },
+  "data_preservation": {
+    "v8_1_to_v8_4_state": true,
+    "storage": "Existing localStorage state extended without reset"
+  },
+  "acceptance": {
+    "javascript_syntax": "PASS",
+    "course_count": 10,
+    "workflow_stages_per_course": 6,
+    "calendar_ics_export": "PASS",
+    "source_csv_export": "PASS",
+    "source_bibtex_export": "PASS",
+    "unified_search_categories": 7
+  }
+}
