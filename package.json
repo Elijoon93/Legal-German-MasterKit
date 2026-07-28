@@ -1,10 +1,10 @@
 {
   "name": "legal-german-masterkit",
-  "version": "9.3.1",
+  "version": "9.3.2",
   "private": true,
   "type": "module",
   "scripts": {
-    "qa:source": "node scripts/qa-v931.mjs",
+    "qa:source": "node scripts/qa-v932.mjs",
     "qa:visual": "playwright test",
     "qa": "npm run qa:source && npm run qa:visual"
   },
