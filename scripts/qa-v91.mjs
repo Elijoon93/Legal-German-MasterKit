@@ -3,7 +3,7 @@ import vm from 'node:vm';
 import {spawnSync} from 'node:child_process';
 
 const required=[
-  'assets/js/v90-shell.js','assets/js/v90-routing.js','assets/js/v91-architecture.js',
+  'assets/js/v90-shell.js','assets/js/v90-routing.js','assets/js/v91-architecture.js','assets/js/v91-device.js',
   'assets/css/v90-foundation.css','assets/css/v91-fidelity.css',
   'release-v9.0.json','release-v9.1.json','release-v8.7.json','release-v8.8.json',
   'assets/js/v87-legal-evidence-data.js','assets/js/v88-deep-lessons-data.js',
@@ -24,13 +24,14 @@ for(const file of jsFiles){
 
 for(const token of [
   'Legal German MasterKit v9.1.0','manifest.webmanifest?v=910','v91-fidelity.css?v=910',
-  'v91-architecture.js?v=910','id="deviceAcceptance"','id="researchHub"'
+  'v91-architecture.js?v=910','v91-device.js?v=910','id="deviceAcceptance"','id="researchHub"'
 ])index.includes(token)?pass('index token',token):fail('index token',token);
 const cssLinks=[...index.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map(x=>x[1]);
 cssLinks.length===8?pass('stylesheet count','8'):fail('stylesheet count',String(cssLinks.length));
 new Set(cssLinks).size===cssLinks.length?pass('stylesheet uniqueness','8 unique'):fail('duplicate stylesheets');
 index.indexOf('v91-fidelity.css?v=910')>index.indexOf('v90-foundation.css?v=900')?pass('v9.1 CSS precedence'):fail('v9.1 CSS precedence');
-index.indexOf('v91-architecture.js?v=910')>index.indexOf('v90-routing.js?v=900')?pass('v9.1 JS precedence'):fail('v9.1 JS precedence');
+index.indexOf('v91-architecture.js?v=910')>index.indexOf('v90-routing.js?v=900')?pass('v9.1 architecture precedence'):fail('v9.1 architecture precedence');
+index.indexOf('v91-device.js?v=910')>index.indexOf('v91-architecture.js?v=910')?pass('v9.1 device precedence'):fail('v9.1 device precedence');
 
 try{
   const context={window:{}};vm.createContext(context);
@@ -53,6 +54,9 @@ release.reference?.forbidden_transfer?.length===4?pass('nursing-content exclusio
 release.architecture?.flow?.join('>')==='Hub>List>Detail>Practice>Output'?pass('architecture flow','locked'):fail('architecture flow');
 release.architecture?.tabbed_hubs===4?pass('tabbed hubs','4'):fail('tabbed hubs',String(release.architecture?.tabbed_hubs));
 release.architecture?.tabs_per_hub===4?pass('tabs per hub','4'):fail('tabs per hub',String(release.architecture?.tabs_per_hub));
+release.architecture?.final_runtime_layers?.length===2?pass('v9.1 runtime layers','2'):fail('v9.1 runtime layers');
+release.device_acceptance?.profiles===9?pass('v9.1 device profiles','9'):fail('v9.1 device profiles',String(release.device_acceptance?.profiles));
+release.device_acceptance?.release_badge_checked==='v9.1.0'?pass('release-aware device badge','v9.1.0'):fail('release-aware device badge');
 release.release_gates?.state_reset===false?pass('state preservation','locked'):fail('state preservation');
 
 const architecture=fs.readFileSync('assets/js/v91-architecture.js','utf8');
@@ -62,6 +66,12 @@ tabDefinitions.length===4?pass('four groups with four tabs','4'):fail('four grou
 for(const forbidden of ['Pflegekraft','Patientenzimmer','Vitalzeichen','Medikamentengabe','Wundversorgung','Klinische Übergabe'])!architecture.includes(forbidden)?pass('no nursing data',forbidden):fail('nursing data leaked',forbidden);
 !architecture.includes('localStorage.clear(')?pass('no localStorage.clear'):fail('forbidden localStorage.clear');
 !architecture.includes('indexedDB.deleteDatabase(')?pass('no indexedDB.deleteDatabase'):fail('forbidden indexedDB.deleteDatabase');
+
+const device=fs.readFileSync('assets/js/v91-device.js','utf8');
+for(const token of ['const VERSION="9.1.0"','const PROFILES=[','releaseVisible','v91ArchitectureVisible','v91RunDeviceMatrix','data-v91-physical'])device.includes(token)?pass('device token',token):fail('device token',token);
+(device.match(/\{id:/g)||[]).length===9?pass('device profile definitions','9'):fail('device profile definitions',String((device.match(/\{id:/g)||[]).length));
+!device.includes('9.0.0')?pass('no stale v9.0 badge check'):fail('stale v9.0 badge check');
+!device.includes('localStorage.clear(')&&!device.includes('indexedDB.deleteDatabase(')?pass('device state preservation'):fail('device destructive call');
 
 const css=fs.readFileSync('assets/css/v91-fidelity.css','utf8');
 for(const token of ['.v91-tabs','.v91-list-item','.v91-quick-grid','@media(max-width:1024px)','env(safe-area-inset-bottom','font-size:16px!important'])css.includes(token)?pass('presentation token',token):fail('presentation token',token);
@@ -73,7 +83,7 @@ manifest.start_url.includes('9.1.0')?pass('manifest start URL',manifest.start_ur
 manifest.display==='standalone'?pass('manifest display','standalone'):fail('manifest display',manifest.display);
 
 const sw=fs.readFileSync('service-worker.js','utf8');
-for(const token of ['lgmk-v9-1-architecture-fidelity','release-v9.1.json','v91-fidelity.css?v=910','v91-architecture.js?v=910'])sw.includes(token)?pass('cache token',token):fail('cache token',token);
+for(const token of ['lgmk-v9-1-architecture-fidelity','release-v9.1.json','v91-fidelity.css?v=910','v91-architecture.js?v=910','v91-device.js?v=910'])sw.includes(token)?pass('cache token',token):fail('cache token',token);
 
 if(failed){console.error(`\n${failed} cumulative v9.1 gate(s) failed.`);process.exit(1)}
-console.log('\nAll cumulative v9.1 architecture, content and responsive gates passed.');
+console.log('\nAll cumulative v9.1 architecture, content, device and responsive gates passed.');
