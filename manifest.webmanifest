@@ -1,7 +1,7 @@
 {
-  "name": "Legal German MasterKit v8.6.1",
+  "name": "Legal German MasterKit v8.7.0",
   "short_name": "Legal MasterKit",
-  "start_url": "./?v=8.6.1",
+  "start_url": "./?v=8.7.0",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f6f8fb",
